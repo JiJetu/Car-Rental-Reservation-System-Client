@@ -3,6 +3,8 @@ import AboutUs from "../pages/about us/AboutUs";
 import Cars from "../pages/car listing/Cars";
 import Home from "../pages/home/Home";
 import { NavLink } from "react-router-dom";
+import Booking from "../pages/booking/Booking";
+import Contact from "../pages/contact/Contact";
 
 type TRoute = {
   path: string;
@@ -29,6 +31,16 @@ const path = [
     path: "aboutUs",
     element: <AboutUs />,
   },
+  {
+    name: "Booking",
+    path: "booking",
+    element: <Booking />,
+  },
+  {
+    name: "Contact",
+    path: "contact",
+    element: <Contact />,
+  },
 ];
 export const navRoutes = path.reduce((acc: TRoute[], item) => {
   if (item.path && item.element) {
@@ -50,7 +62,7 @@ export const navItems = path.reduce((acc: TItems[], item) => {
           to={`${item.path}`}
           className={({ isActive, isPending }) =>
             isActive
-              ? "px-5 py-2 border-b-2 rounded-xl hover:bg-transparent hover:border-b-slate-700"
+              ? "px-5 py-2 border-b-2 rounded-xl font-bold hover:bg-transparent hover:border-b-slate-700"
               : isPending
               ? "pending"
               : "hover:bg-transparent"

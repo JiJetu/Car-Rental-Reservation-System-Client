@@ -1,3 +1,5 @@
+import logo from "../../assets/images/preview (1).png";
+
 const Footer = () => {
   return (
     <div className="text-center bg-base-200">
@@ -7,13 +9,13 @@ const Footer = () => {
           <h1 className="xl font-semibold font-serif">
             <div className="flex items-center gap-3">
               <img
-                className="h-[70px] md:w-[70px]"
-                src="https://th.bing.com/th/id/OIG2.DyrLryTuvTHAWqJO16H9?pid=ImgGn"
+                className="h-[40px] w-[40px] md:h-[70px] md:w-[70px]"
+                src={logo}
                 alt=""
               />
               <p className="hover:text-black flex gap-2">
-                <span className="text-[#70E6D2] font-extrabold">Campers</span>
-                Shop
+                <span className="text-[#49af88] font-extrabold">Rental</span>
+                Car
               </p>
             </div>
           </h1>
@@ -75,9 +77,9 @@ const Footer = () => {
       </footer>
       {/* ownership section with dynamic year */}
       <div>
-        <span className="text-[#70E6D2] font-extrabold">Wilderness</span>
-        Wonders ©{new Date().getFullYear()} Created by{" "}
-        <span className="text-[#06b99e]">Md Jaoadul Islam </span>
+        <span className="text-[#49af88] font-extrabold">Rental</span> Car ©
+        {new Date().getFullYear()} Created by{" "}
+        <span className="text-[#6A9C89]">Md Jaoadul Islam </span>
       </div>
     </div>
   );
