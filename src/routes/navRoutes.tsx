@@ -5,6 +5,7 @@ import Home from "../pages/home/Home";
 import { NavLink } from "react-router-dom";
 import Booking from "../pages/booking/Booking";
 import Contact from "../pages/contact/Contact";
+import CarDetails from "@/pages/carDetails/CarDetails";
 
 type TRoute = {
   path: string;
@@ -40,6 +41,10 @@ const path = [
     name: "Contact",
     path: "contact",
     element: <Contact />,
+  },
+  {
+    path: "car/:id",
+    element: <CarDetails />,
   },
 ];
 export const navRoutes = path.reduce((acc: TRoute[], item) => {

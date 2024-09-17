@@ -29,7 +29,9 @@ const Footer = () => {
                   placeholder="username@site.com"
                   className="input input-bordered flex-grow"
                 />
-                <button className="btn btn-primary">Subscribe</button>
+                <button className="btn btn-primary bg-[#00712D]">
+                  Subscribe
+                </button>
               </div>
             </fieldset>
           </form>
