@@ -112,7 +112,7 @@ const Hero = () => {
 
           <button
             type="submit"
-            className="px-6 py-3 bg-[#18ac73] text-white rounded-lg hover:bg-[#079b62] md:w-auto"
+            className="px-6 py-3 bg-[#079b62] text-white rounded-lg hover:bg-[#18ac73] md:w-auto"
           >
             Book Now
           </button>

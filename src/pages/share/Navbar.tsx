@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { navItems } from "../../routes/navRoutes";
 import logo from "../../assets/images/preview (1).png";
-import { Button } from "antd";
+import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const navbar = (
@@ -62,7 +62,9 @@ const Navbar = () => {
 
         <div className="navbar-end">
           <NavLink to={"/login"}>
-            <Button className="bg-white hover:bg-white">Login</Button>
+            <Button className="bg-white text-black hover:bg-white">
+              Login
+            </Button>
           </NavLink>
         </div>
       </nav>
