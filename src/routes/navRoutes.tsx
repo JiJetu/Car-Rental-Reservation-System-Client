@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import Booking from "../pages/booking/Booking";
 import Contact from "../pages/contact/Contact";
 import CarDetails from "@/pages/carDetails/CarDetails";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 
 type TRoute = {
   path: string;
@@ -35,7 +36,11 @@ const path = [
   {
     name: "Booking",
     path: "booking",
-    element: <Booking />,
+    element: (
+      <ProtectedRoute>
+        <Booking />
+      </ProtectedRoute>
+    ),
   },
   {
     name: "Contact",

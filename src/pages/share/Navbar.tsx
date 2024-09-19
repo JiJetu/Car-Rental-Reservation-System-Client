@@ -61,9 +61,9 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-end">
-          <NavLink to={"/login"}>
+          <NavLink to={"/signIn"}>
             <Button className="bg-white text-black hover:bg-white">
-              Login
+              Sign In
             </Button>
           </NavLink>
         </div>

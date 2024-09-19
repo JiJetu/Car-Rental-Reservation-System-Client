@@ -104,8 +104,7 @@ const Footer = () => {
 
       {/* Ownership section with dynamic year */}
       <div className="pt-4 text-sm text-gray-500">
-        <span className="text-[#49af88] font-bold">Rental</span> Car ©{" "}
-        {new Date().getFullYear()} Created by{" "}
+        <strong>Rental Car</strong> © {new Date().getFullYear()} Created by{" "}
         <span className="text-[#6A9C89]">Md Jaoadul Islam</span>
       </div>
     </div>

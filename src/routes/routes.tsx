@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import { navRoutes } from "./navRoutes";
-import Login from "../pages/login/Login";
-import SignUp from "../pages/signUp/SignUp";
+import SignIn from "../pages/auth/SignIn";
+import SignUp from "../pages/auth/SignUp";
 
 const router = createBrowserRouter([
   {
@@ -11,8 +11,8 @@ const router = createBrowserRouter([
     children: navRoutes,
   },
   {
-    path: "/login",
-    element: <Login />,
+    path: "/signIn",
+    element: <SignIn />,
   },
   {
     path: "/signUp",

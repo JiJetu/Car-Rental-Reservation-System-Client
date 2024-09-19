@@ -17,7 +17,6 @@ const Contact = () => {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    // Simulate form submission
     console.log(data);
     Swal.fire({
       position: "top-end",
