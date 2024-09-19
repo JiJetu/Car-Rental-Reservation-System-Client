@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
 import { Button } from "@/components/ui/button";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
-import { setUser } from "@/redux/features/auth/authSlice";
+import { setUser, TUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { verifyToken } from "@/utils/verifyToken";
+import { toast } from "sonner";
 
 type FormValues = {
   email: string;
@@ -14,10 +14,10 @@ type FormValues = {
 };
 
 const SignIn = () => {
-  const [login, { error }] = useLoginMutation();
+  const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -30,43 +30,24 @@ const SignIn = () => {
   });
 
   const onSubmit = async (data: FormValues) => {
-    // setLoading(true);
-    // Simulate a login API call
-    const userInfo = {
-      email: data.email,
-      password: data.password,
-    };
+    const toastId = toast.loading("Logging in");
+    setLoading(true);
+    try {
+      const userInfo = {
+        email: data.email,
+        password: data.password,
+      };
 
-    const res = await login(userInfo).unwrap();
+      const res = await login(userInfo).unwrap();
+      const user = verifyToken(res.token) as TUser;
 
-    const user = verifyToken(res.token);
-    console.log({ res }, { user });
-
-    dispatch(setUser({ user: user, token: res.token }));
-
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   // if (
-    //   //   data.email === "user@example.com" &&
-    //   //   data.password === "password123"
-    //   // ) {
-    //   //   Swal.fire({
-    //   //     icon: "success",
-    //   //     title: "Login Successful",
-    //   //     timer: 1500,
-    //   //     showConfirmButton: false,
-    //   //   });
-    //   //   navigate("/dashboard");
-    //   // } else {
-    //   //   Swal.fire({
-    //   //     icon: "error",
-    //   //     title: "Invalid email or password",
-    //   //     text: "Please check your credentials and try again.",
-    //   //     timer: 2000,
-    //   //     showConfirmButton: false,
-    //   //   });
-    //   // }
-    // }, 2000);
+      dispatch(setUser({ user: user, token: res.token }));
+      setLoading(false);
+      toast.success("Logged in successful", { id: toastId, duration: 2000 });
+      navigate("/");
+    } catch (error) {
+      toast.error("Something went wrong", { id: toastId, duration: 2000 });
+    }
   };
 
   return (

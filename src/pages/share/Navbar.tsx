@@ -2,8 +2,12 @@ import { NavLink } from "react-router-dom";
 import { navItems } from "../../routes/navRoutes";
 import logo from "../../assets/images/preview (1).png";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectCurrentUser);
   const navbar = (
     <>
       {navItems.map((navItem) => (
@@ -11,6 +15,10 @@ const Navbar = () => {
       ))}
     </>
   );
+
+  const handleLogout = () => {
+    dispatch(logOut());
+  };
 
   return (
     <>
@@ -61,11 +69,20 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-end">
-          <NavLink to={"/signIn"}>
-            <Button className="bg-white text-black hover:bg-white">
-              Sign In
+          {!user ? (
+            <NavLink to={"/signIn"}>
+              <Button className="bg-white text-black hover:bg-white">
+                Sign In
+              </Button>
+            </NavLink>
+          ) : (
+            <Button
+              onClick={handleLogout}
+              className="bg-white text-black hover:bg-white"
+            >
+              Log out
             </Button>
-          </NavLink>
+          )}
         </div>
       </nav>
       <nav className="navbar lg:flex lg:justify-center lg:items-center bg-base-100 hidden lg:visible">
