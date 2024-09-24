@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ const SignIn = () => {
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -31,7 +29,6 @@ const SignIn = () => {
 
   const onSubmit = async (data: FormValues) => {
     const toastId = toast.loading("Logging in");
-    setLoading(true);
     try {
       const userInfo = {
         email: data.email,
@@ -42,7 +39,6 @@ const SignIn = () => {
       const user = verifyToken(res.token) as TUser;
 
       dispatch(setUser({ user: user, token: res.token }));
-      setLoading(false);
       toast.success("Logged in successful", { id: toastId, duration: 2000 });
       navigate("/");
     } catch (error) {
@@ -98,12 +94,9 @@ const SignIn = () => {
           {/* Submit Button */}
           <Button
             type="submit"
-            className={`w-full bg-[#079b62] text-white hover:bg-[#18ac73] font-semibold ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            disabled={loading}
+            className={`w-full bg-[#079b62] text-white hover:bg-[#18ac73] font-semibold`}
           >
-            {loading ? "Signing In..." : "Sign In"}
+            Sign In
           </Button>
         </form>
 

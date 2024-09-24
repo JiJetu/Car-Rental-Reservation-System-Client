@@ -1,14 +1,28 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import { navRoutes } from "./navRoutes";
 import SignIn from "../pages/auth/SignIn";
 import SignUp from "../pages/auth/SignUp";
+import { routesGenerator } from "@/utils/routesGenerator";
+import { mainPath } from "./navbar.routes";
+import UserAdminLayout from "@/components/layout/UserAdminLayout";
+import { adminPaths } from "./admin.routes";
+import { userPaths } from "./user.routes";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children: navRoutes,
+    children: routesGenerator(mainPath),
+  },
+  {
+    path: "/admin",
+    element: <UserAdminLayout />,
+    children: routesGenerator(adminPaths),
+  },
+  {
+    path: "/user",
+    element: <UserAdminLayout />,
+    children: routesGenerator(userPaths),
   },
   {
     path: "/signIn",

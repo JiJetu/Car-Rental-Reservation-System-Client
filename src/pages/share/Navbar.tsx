@@ -1,20 +1,13 @@
 import { NavLink } from "react-router-dom";
-import { navItems } from "../../routes/navRoutes";
 import logo from "../../assets/images/preview (1).png";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { NavbarItems } from "./NavbarItems";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
-  const navbar = (
-    <>
-      {navItems.map((navItem) => (
-        <li key={navItem.key}>{navItem.label}</li>
-      ))}
-    </>
-  );
 
   const handleLogout = () => {
     dispatch(logOut());
@@ -45,7 +38,7 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-              {navbar}
+              <NavbarItems />
             </ul>
           </div>
 
@@ -87,7 +80,9 @@ const Navbar = () => {
       </nav>
       <nav className="navbar lg:flex lg:justify-center lg:items-center bg-base-100 hidden lg:visible">
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 space-x-2">{navbar}</ul>
+          <ul className="menu menu-horizontal px-1 space-x-2">
+            <NavbarItems />
+          </ul>
         </div>
       </nav>
     </>
