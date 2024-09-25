@@ -69,9 +69,6 @@ const Sidebar = () => {
       />
       <div className="divider divider-success p-2"></div>
       <Menu
-        style={{
-          textAlign: "center",
-        }}
         theme="dark"
         mode="inline"
         defaultSelectedKeys={["4"]}
