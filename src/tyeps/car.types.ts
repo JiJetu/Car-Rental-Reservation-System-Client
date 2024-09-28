@@ -6,10 +6,11 @@ export const CarStatus = {
 export type TCar = {
   _id: string;
   name: string;
+  shortDescription: string;
   description: string;
-  image: string;
   color: string;
   type: string;
+  carImage: string;
   isElectric: boolean;
   status: keyof typeof CarStatus;
   features: string[];

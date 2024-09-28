@@ -7,18 +7,19 @@ type TCustomSwitchProps = {
   defaultChecked?: boolean;
 };
 
-const CustomSwitch = ({ name, label, defaultChecked }: TCustomSwitchProps) => {
+const CustomSwitch = ({
+  name,
+  label,
+  defaultChecked = false,
+}: TCustomSwitchProps) => {
   return (
     <div style={{ marginBottom: "15px" }}>
       <Controller
         name={name}
-        render={({ field, fieldState: { error } }) => (
+        defaultValue={defaultChecked}
+        render={({ field: { value, ...field }, fieldState: { error } }) => (
           <Form.Item label={label}>
-            <Switch
-              checked={field.value}
-              onChange={field.onChange}
-              defaultChecked={defaultChecked}
-            />
+            <Switch {...field} value={defaultChecked} checked={value} />
             {error && <p style={{ color: "red" }}>{error.message}</p>}
           </Form.Item>
         )}

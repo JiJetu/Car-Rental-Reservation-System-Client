@@ -9,6 +9,8 @@ const CarListing = () => {
   const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
   const { data: carsData } = useGetAllCarsQuery(params);
 
+  console.log(carsData);
+
   const cars = carsData?.data || [];
 
   const handleFilterSubmit: SubmitHandler<FieldValues> = (data) => {

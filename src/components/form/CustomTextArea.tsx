@@ -7,12 +7,14 @@ type TCustomTextAreaProps = {
   name: string;
   placeholderText?: string;
   label?: string;
+  maxRow?: number;
 };
 
 const CustomTextArea = ({
   name,
   label,
   placeholderText,
+  maxRow = 2,
 }: TCustomTextAreaProps) => {
   return (
     <div style={{ marginBottom: "15px" }}>
@@ -23,7 +25,7 @@ const CustomTextArea = ({
             <TextArea
               {...field}
               placeholder={`Enter your ${placeholderText}`}
-              autoSize={{ minRows: 2, maxRows: 4 }}
+              autoSize={{ minRows: 2, maxRows: maxRow }}
             />
             {error && <p style={{ color: "red" }}>{error.message}</p>}
           </Form.Item>
