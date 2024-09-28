@@ -9,14 +9,18 @@ export type TCar = {
   description: string;
   image: string;
   color: string;
+  type: string;
   isElectric: boolean;
   status: keyof typeof CarStatus;
   features: string[];
   pricePerHour: number;
   isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 };
 
-export type TReturnCar = {
-  bookingId: Types.ObjectId;
-  endTime: string;
-};
+// export type TReturnCar = {
+//   bookingId: Types.ObjectId;
+//   endTime: string;
+// };

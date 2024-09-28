@@ -7,11 +7,13 @@ import { mainPath } from "./navbar.routes";
 import UserAdminLayout from "@/components/layout/UserAdminLayout";
 import { adminPaths } from "./admin.routes";
 import { userPaths } from "./user.routes";
+import NotFoundPage from "@/pages/not-found-page/NotFoundPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <NotFoundPage />,
     children: routesGenerator(mainPath),
   },
   {

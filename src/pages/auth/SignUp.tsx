@@ -1,42 +1,65 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-interface FormValues {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phoneNumber?: string;
-  termsAccepted: boolean;
-}
+import { TSignUpFormValues } from "@/tyeps";
+import { useSignUpMutation } from "@/redux/features/auth/auth.api";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/redux/hooks";
+import { logOut } from "@/redux/features/auth/authSlice";
 
 const SignUp = () => {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [signUp] = useSignUpMutation();
+  const dispatch = useAppDispatch();
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<TSignUpFormValues>();
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      Swal.fire({
-        icon: "success",
-        title: "Registration Successful",
-        text: "You will be redirected to the login page.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      navigate("/login");
-    }, 2000);
+  const onSubmit: SubmitHandler<TSignUpFormValues> = async (data) => {
+    let phoneNumber;
+
+    if (data.phoneNumber === "") {
+      phoneNumber = "013244235436";
+    } else {
+      phoneNumber = data.phoneNumber;
+    }
+
+    const toastId = toast.loading("Signing up...");
+    try {
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        role: "user",
+        password: data.password,
+        phone: phoneNumber,
+        address: data.address,
+      };
+
+      const res = await signUp(userInfo);
+      if (res?.data.success) {
+        toast.success("Sign up successful", { id: toastId, duration: 2000 });
+
+        reset({
+          name: "",
+          email: "",
+          phoneNumber: "",
+          address: "",
+          password: "",
+          confirmPassword: "",
+          termsAccepted: false,
+        });
+        dispatch(logOut());
+        navigate("/signIn");
+      }
+      console.log(res);
+    } catch (error) {
+      toast.error("Something went wrong", { id: toastId, duration: 2000 });
+    }
   };
 
   const password = watch("password");
@@ -83,6 +106,17 @@ const SignUp = () => {
               className="input input-bordered w-full"
               placeholder="Enter your phone number"
             />
+          </div>
+          <div>
+            <label className="text-sm font-medium">Address</label>
+            <input
+              {...register("address")}
+              className="input input-bordered w-full"
+              placeholder="Enter your address"
+            />
+            {errors.address && (
+              <p className="text-red-500 text-sm">{errors.address.message}</p>
+            )}
           </div>
           <div>
             <label className="text-sm font-medium">Password</label>
@@ -138,9 +172,8 @@ const SignUp = () => {
           <Button
             type="submit"
             className="w-full bg-[#079b62] text-white hover:bg-[#18ac73]"
-            disabled={loading}
           >
-            {loading ? "Signing Up..." : "Sign Up"}
+            Sign Up
           </Button>
         </form>
 

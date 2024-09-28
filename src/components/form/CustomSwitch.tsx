@@ -12,13 +12,14 @@ const CustomSwitch = ({ name, label, defaultChecked }: TCustomSwitchProps) => {
     <div style={{ marginBottom: "15px" }}>
       <Controller
         name={name}
-        render={({ field }) => (
+        render={({ field, fieldState: { error } }) => (
           <Form.Item label={label}>
             <Switch
               checked={field.value}
               onChange={field.onChange}
               defaultChecked={defaultChecked}
             />
+            {error && <p style={{ color: "red" }}>{error.message}</p>}
           </Form.Item>
         )}
       />

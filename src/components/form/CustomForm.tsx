@@ -9,6 +9,7 @@ import {
 
 type TFormConfig = {
   defaultValues?: Record<string, any>;
+  resolver?: any;
 };
 
 type TCustomFormProps = {
@@ -20,6 +21,7 @@ const CustomForm = ({
   onSubmit,
   children,
   defaultValues,
+  resolver,
 }: TCustomFormProps) => {
   const formConfig: TFormConfig = {};
 
@@ -27,11 +29,20 @@ const CustomForm = ({
     formConfig["defaultValues"] = defaultValues;
   }
 
+  if (resolver) {
+    formConfig["resolver"] = resolver;
+  }
+
   const methods = useForm(formConfig);
+
+  const submit: SubmitHandler<FieldValues> = (data) => {
+    onSubmit(data);
+    methods.reset();
+  };
 
   return (
     <FormProvider {...methods}>
-      <Form layout="vertical" onFinish={methods.handleSubmit(onSubmit)}>
+      <Form layout="vertical" onFinish={methods.handleSubmit(submit)}>
         {children}
       </Form>
     </FormProvider>

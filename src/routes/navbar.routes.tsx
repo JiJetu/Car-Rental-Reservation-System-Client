@@ -1,10 +1,10 @@
 import AboutUs from "../pages/about us/AboutUs";
-import Cars from "../pages/car listing/Cars";
 import Home from "../pages/home/Home";
 import Booking from "../pages/booking/Booking";
 import Contact from "../pages/contact/Contact";
 import CarDetails from "@/pages/carDetails/CarDetails";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import CarListing from "@/pages/car listing/CarListing";
 
 export const mainPath = [
   {
@@ -15,7 +15,7 @@ export const mainPath = [
   {
     name: "Cars",
     path: "cars",
-    element: <Cars />,
+    element: <CarListing />,
   },
   {
     name: "About Us",

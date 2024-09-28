@@ -18,8 +18,8 @@ const CustomInput = ({
     <div style={{ marginBottom: "15px" }}>
       <Controller
         name={name}
-        render={({ field }) => (
-          <Form.Item label={label}>
+        render={({ field, fieldState: { error } }) => (
+          <Form.Item label={label} validateStatus={error ? "error" : ""}>
             <Input
               {...field}
               type={type}
@@ -27,6 +27,7 @@ const CustomInput = ({
               size="large"
               placeholder={`Enter your ${placeholderText}`}
             />
+            {error && <p style={{ color: "red" }}>{error.message}</p>}
           </Form.Item>
         )}
       />

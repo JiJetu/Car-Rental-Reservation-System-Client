@@ -1,14 +1,17 @@
-import { Button, Layout } from "antd";
+import { Button, Layout, Typography } from "antd";
+import { LogoutOutlined } from "@ant-design/icons";
 import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
-import { logOut } from "@/redux/features/auth/authSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import ProtectedRoute from "./ProtectedRoute";
 
 const { Header, Content } = Layout;
+const { Title } = Typography;
 
 const UserAdminLayout = () => {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectCurrentUser);
 
   const handleLogout = () => {
     dispatch(logOut());
@@ -16,21 +19,50 @@ const UserAdminLayout = () => {
 
   return (
     <ProtectedRoute>
-      <Layout style={{ height: "100%" }}>
+      <Layout style={{ height: "100%", backgroundColor: "#f0f2f5" }}>
         <Sidebar />
         <Layout>
-          <Header>
-            <Button onClick={handleLogout}>Logout</Button>{" "}
-          </Header>
-          <Content style={{ margin: "24px 16px 0" }}>
-            <div
+          <Header
+            style={{
+              background: "#fff",
+              padding: "0 24px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <Title level={3} style={{ margin: 0, color: "#001529" }}>
+              {user?.role === "admin"
+                ? "Admin"
+                : user?.role === "user" && "User"}{" "}
+              Dashboard
+            </Title>
+            <Button
+              type="primary"
+              icon={<LogoutOutlined />}
+              onClick={handleLogout}
               style={{
-                padding: 24,
-                minHeight: 360,
+                borderRadius: "8px",
+                backgroundColor: "#FF4D4F",
+                borderColor: "#FF4D4F",
+                fontWeight: "500",
               }}
             >
-              <Outlet />
-            </div>
+              Logout
+            </Button>
+          </Header>
+          <Content
+            style={{
+              margin: "24px 16px",
+              padding: 24,
+              background: "#fff",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+              minHeight: "calc(100vh - 112px)",
+            }}
+          >
+            <Outlet />
           </Content>
         </Layout>
       </Layout>
