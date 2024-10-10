@@ -1,5 +1,7 @@
-import { Form, Select } from "antd";
+import { Form, Select, Typography } from "antd";
 import { Controller } from "react-hook-form";
+
+const { Text } = Typography;
 
 type TCustomSelectProps = {
   label: string;
@@ -18,7 +20,13 @@ const CustomSelect = ({
     <Controller
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <Form.Item label={label}>
+        <Form.Item
+          label={
+            <Text strong className="dark:text-white">
+              {label}
+            </Text>
+          }
+        >
           <Select
             mode={multiple ? "multiple" : undefined}
             // defaultValue={options[0].label}

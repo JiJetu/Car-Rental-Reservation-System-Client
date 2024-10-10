@@ -5,6 +5,9 @@ import { Outlet } from "react-router-dom";
 import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import ProtectedRoute from "./ProtectedRoute";
+import { useMode } from "@/hooks/useMode";
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { modeItem } from "@/constant/mode";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -12,6 +15,7 @@ const { Title } = Typography;
 const UserAdminLayout = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
+  const { changeMode, mode } = useMode();
 
   const handleLogout = () => {
     dispatch(logOut());
@@ -19,48 +23,62 @@ const UserAdminLayout = () => {
 
   return (
     <ProtectedRoute>
-      <Layout style={{ height: "100%", backgroundColor: "#f0f2f5" }}>
+      <Layout
+        className={`h-full ${
+          mode === modeItem.DARK ? "dark:bg-[#1a1919]" : "bg-[#f0f2f5]"
+        }`}
+      >
         <Sidebar />
         <Layout>
           <Header
-            style={{
-              background: "#fff",
-              padding: "0 24px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-            }}
+            className={`flex justify-between items-center px-6 shadow-sm ${
+              mode === modeItem.DARK ? "dark:bg-[#1a1919]" : "bg-white"
+            }`}
           >
             <Title level={3} style={{ margin: 0, color: "#001529" }}>
-              {user?.role === "admin"
-                ? "Admin"
-                : user?.role === "user" && "User"}{" "}
-              Dashboard
+              <span className="dark:text-white">
+                {user?.role === "admin"
+                  ? "Admin"
+                  : user?.role === "user" && "User"}{" "}
+                Dashboard
+              </span>
             </Title>
-            <Button
-              type="primary"
-              icon={<LogoutOutlined />}
-              onClick={handleLogout}
+            <div
               style={{
-                borderRadius: "8px",
-                backgroundColor: "#FF4D4F",
-                borderColor: "#FF4D4F",
-                fontWeight: "500",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "8px",
               }}
             >
-              Logout
-            </Button>
+              <Button
+                className="bg-white text-slate-800 hover:bg-white"
+                onClick={changeMode}
+              >
+                {mode === modeItem.DARK ? <SunIcon /> : <MoonIcon />}
+              </Button>
+              <Button
+                type="primary"
+                icon={<LogoutOutlined />}
+                onClick={handleLogout}
+                style={{
+                  borderRadius: "8px",
+                  backgroundColor: "#FF4D4F",
+                  borderColor: "#FF4D4F",
+                  fontWeight: "500",
+                }}
+              >
+                Logout
+              </Button>
+            </div>
           </Header>
           <Content
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              background: "#fff",
-              borderRadius: "8px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
-              minHeight: "calc(100vh - 112px)",
-            }}
+            className={`rounded-lg ${
+              mode === modeItem.DARK
+                ? "dark:bg-[#1a1919] dark:text-white dark:border-2 dark:border-[#4d4b4b] m-0 p-12 shadow-none"
+                : "bg-white m-6 p-6 shadow-lg"
+            }`}
+            style={{ minHeight: "calc(100vh - 112px)" }}
           >
             <Outlet />
           </Content>

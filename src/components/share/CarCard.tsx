@@ -16,7 +16,7 @@ const CarCard = ({ car }: TCarProps) => {
   return (
     <Link to={`/car/${car._id}`}>
       <div className="p-4 flex flex-col h-full">
-        <Card className="flex flex-col h-full shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out bg-white border border-gray-200 rounded-lg">
+        <Card className="flex flex-col h-full shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out bg-white border border-gray-200 rounded-lg dark:bg-[#0f0f0f] dark:border-[#888]">
           <CardHeader className="relative">
             <img
               src={car.carImage}
@@ -26,7 +26,9 @@ const CarCard = ({ car }: TCarProps) => {
           </CardHeader>
           <CardContent className="p-4 flex-grow">
             <CardTitle className="text-2xl font-bold">{car.name}</CardTitle>
-            <p className="text-gray-700 mt-2">{car.shortDescription}</p>
+            <p className="text-gray-700 dark:text-white mt-2">
+              {car.shortDescription}
+            </p>
           </CardContent>
           <CardFooter className="flex justify-between items-center p-4 bg-gray-50 rounded-b-lg">
             <span className="text-lg font-semibold text-[#00712D]">

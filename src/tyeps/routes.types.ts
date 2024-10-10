@@ -12,8 +12,10 @@ export type TPath = {
   children?: TPath[];
 };
 
-export type TPathItem = {
-  key: string;
-  label: ReactNode;
-  children?: TPathItem[];
-};
+export type TPathItem =
+  | {
+      key: string;
+      label: ReactNode;
+      children?: TPathItem[];
+    }
+  | undefined;

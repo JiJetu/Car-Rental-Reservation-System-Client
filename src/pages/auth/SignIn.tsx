@@ -45,8 +45,8 @@ const SignIn = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-[#1a1919]">
+      <div className="w-full max-w-md bg-white dark:bg-[#1a1919] p-8 rounded-lg shadow-lg dark:border-2 dark:border-[#4d4b4b]">
         <h2 className="text-2xl font-bold text-center">Sign In</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
           {/* Email Field */}
@@ -60,7 +60,7 @@ const SignIn = () => {
                   message: "Invalid email address",
                 },
               })}
-              className="input input-bordered w-full"
+              className="input input-bordered w-full dark:text-black"
               placeholder="Enter your email"
             />
             {errors.email && (
@@ -74,7 +74,7 @@ const SignIn = () => {
             <input
               type="password"
               {...register("password", { required: "Password is required" })}
-              className="input input-bordered w-full"
+              className="input input-bordered w-full dark:text-black"
               placeholder="Enter your password"
             />
             {errors.password && (

@@ -4,6 +4,7 @@ import AddCar from "@/pages/admin/manage-cars/AddCar";
 import AllCars from "@/pages/admin/manage-cars/AllCars";
 import AllReturnCars from "@/pages/admin/manage-return-cars/AllReturnCars";
 import AllUsers from "../pages/admin/manage-user/AllUsers";
+import UpdateCar from "@/pages/admin/manage-cars/UpdateCar";
 
 export const adminPaths = [
   {
@@ -23,6 +24,10 @@ export const adminPaths = [
         name: "View Cars",
         path: "view-cars",
         element: <AllCars />,
+      },
+      {
+        path: "update-cars/:id",
+        element: <UpdateCar />,
       },
     ],
   },

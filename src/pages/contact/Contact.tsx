@@ -31,7 +31,7 @@ const Contact = () => {
     <div className="container mx-auto p-6 md:p-12">
       <section className="text-center mb-10">
         <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-        <p className="text-lg text-gray-600 mt-3">
+        <p className="text-lg text-gray-600 dark:text-white mt-3">
           We'd love to hear from you! Feel free to reach out with any questions
           or concerns.
         </p>
@@ -41,18 +41,18 @@ const Contact = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h3 className="text-2xl font-semibold mb-4">Contact Information</h3>
-            <p className="text-lg text-gray-700 mb-2">
+            <p className="text-lg text-gray-700 dark:text-white mb-2">
               <strong>Phone:</strong> +(880) 11-00-8888
             </p>
-            <p className="text-lg text-gray-700 mb-2">
+            <p className="text-lg text-gray-700 dark:text-white mb-2">
               <strong>Email:</strong> support@ourcompany.com
             </p>
-            <p className="text-lg text-gray-700 mb-4">
+            <p className="text-lg text-gray-700 dark:text-white mb-4">
               <strong>Address:</strong> 1361 Dhaka, Bangladesh
             </p>
             <div className="mb-6">
               <h3 className="text-2xl font-semibold mb-4">Business Hours</h3>
-              <p className="text-lg text-gray-700">
+              <p className="text-lg text-gray-700 dark:text-white">
                 Monday - Friday: 9:00 AM - 6:00 PM
                 <br />
                 Saturday: 10:00 AM - 4:00 PM

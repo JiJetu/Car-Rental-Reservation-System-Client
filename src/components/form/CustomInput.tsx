@@ -1,5 +1,7 @@
-import { Form, Input } from "antd";
+import { Form, Input, Typography } from "antd";
 import { Controller } from "react-hook-form";
+
+const { Text } = Typography;
 
 type TCustomInputProps = {
   type: string;
@@ -19,7 +21,14 @@ const CustomInput = ({
       <Controller
         name={name}
         render={({ field, fieldState: { error } }) => (
-          <Form.Item label={label} validateStatus={error ? "error" : ""}>
+          <Form.Item
+            label={
+              <Text strong className="dark:text-white">
+                {label}
+              </Text>
+            }
+            validateStatus={error ? "error" : ""}
+          >
             <Input
               {...field}
               type={type}

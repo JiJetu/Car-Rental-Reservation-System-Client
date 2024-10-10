@@ -17,8 +17,8 @@ export const NavbarItems = () => {
             to={`/${user.role}/dashboard`}
             className={({ isActive }) =>
               isActive
-                ? "px-5 py-2 border-b-2 rounded-xl font-bold hover:bg-transparent hover:border-b-slate-700"
-                : "font-bold text-[#49af88] hover:bg-transparent"
+                ? "px-5 py-2 border-b-2 dark:bg-white dark:text-black rounded-xl font-bold hover:bg-transparent hover:border-b-slate-700"
+                : "font-bold text-[#49af88] dark:text-black hover:bg-transparent"
             }
           >
             Dashboard

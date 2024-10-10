@@ -32,7 +32,7 @@ const AboutUs = () => {
     <div className="container mx-auto p-6">
       <section className="text-center mb-10">
         <h1 className="text-4xl font-bold">About Us</h1>
-        <p className="text-lg text-gray-600 md:mt-3">
+        <p className="text-lg text-gray-600 dark:text-white md:mt-3">
           Learn more about our company, our values, and the amazing team behind
           our success.
         </p>
@@ -40,7 +40,7 @@ const AboutUs = () => {
 
       <section className="mb-10">
         <h2 className="text-3xl font-bold mb-4">Company History</h2>
-        <p className="text-lg text-gray-700">
+        <p className="text-lg text-gray-700 dark:text-white">
           Founded in 2000, our company has been dedicated to providing top-notch
           car rental services. Our mission is to offer affordable and reliable
           transportation solutions while ensuring customer satisfaction. Our
@@ -56,7 +56,7 @@ const AboutUs = () => {
             {teamMembers.map((member, index) => (
               <div
                 key={index}
-                className="card bg-white md:shadow-md rounded-lg p-6"
+                className="card bg-white dark:bg-[#1a1919] md:shadow-md rounded-lg p-6"
                 data-aos={member.aos}
                 data-aos-duration={`${member.duration}`}
               >
@@ -70,8 +70,12 @@ const AboutUs = () => {
                 <h3 className="text-xl font-semibold text-center">
                   {member.name}
                 </h3>
-                <p className="text-center text-gray-600">{member.role}</p>
-                <p className="mt-2 text-gray-700 text-sm">{member.bio}</p>
+                <p className="text-center text-gray-600 dark:text-white">
+                  {member.role}
+                </p>
+                <p className="mt-2 text-gray-700 dark:text-white text-sm">
+                  {member.bio}
+                </p>
               </div>
             ))}
           </div>
@@ -80,13 +84,13 @@ const AboutUs = () => {
 
       <section className="mb-10">
         <h2 className="text-3xl font-bold mb-4">Our Fleet</h2>
-        <p className="text-lg text-gray-700 mb-4">
+        <p className="text-lg text-gray-700 dark:text-white mb-4">
           We offer a diverse range of vehicles to meet every need. Whether
           you're looking for an economy car for a budget-friendly trip, a luxury
           vehicle for a special occasion, or an SUV for a family vacation, we
           have the perfect car for you.
         </p>
-        <ul className="list-disc list-inside pl-5 text-gray-700">
+        <ul className="list-disc list-inside pl-5 text-gray-700 dark:text-white">
           <li>
             Economy Cars: Affordable and efficient options for everyday use.
           </li>
@@ -101,7 +105,7 @@ const AboutUs = () => {
 
       <section className="mb-10">
         <h2 className="text-3xl font-bold mb-4">Values & Commitment</h2>
-        <p className="text-lg text-gray-700">
+        <p className="text-lg text-gray-700 dark:text-white">
           Our commitment to customer service is at the heart of everything we
           do. We strive to provide a seamless and enjoyable experience for every
           customer. Additionally, we are dedicated to sustainability and
@@ -112,7 +116,7 @@ const AboutUs = () => {
 
       <section className="mb-10">
         <h2 className="text-3xl font-bold mb-4">Contact Information</h2>
-        <ul className="list-none text-lg text-gray-700">
+        <ul className="list-none text-lg text-gray-700 dark:text-white">
           <li className="mb-2">
             <strong>Phone:</strong> +(880) 11-00-88888
           </li>

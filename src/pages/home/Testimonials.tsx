@@ -66,13 +66,15 @@ const Testimonials = () => {
               <CarouselItem key={review.id} className="flex justify-center">
                 <div className="p-4 w-full max-w-2xl min-h-[450px] md:min-h-[400px]">
                   <Card className="h-full shadow-lg">
-                    <CardContent className="flex flex-col-reverse md:flex-row items-center justify-between h-full p-6">
+                    <CardContent className="dark:bg-[#1a1919] flex flex-col-reverse md:flex-row items-center justify-between h-full p-6">
                       <div className="md:w-2/3 mb-6 md:mb-0 md:mr-6 space-y-4">
-                        <h3 className="text-base text-gray-500">
+                        <h3 className="text-base text-gray-500 dark:text-white">
                           Customer Review
                         </h3>
-                        <p className="text-xl font-semibold">{review.review}</p>
-                        <p className="text-base space-x-2 text-gray-500 flex items-center">
+                        <p className="md:text-xl dark:text-white font-semibold">
+                          {review.review}
+                        </p>
+                        <p className="text-base space-x-2 text-gray-500 dark:text-white flex items-center">
                           <span className="text-3xl">-</span>
                           <span>{review.name}</span> |<span>{review.date}</span>
                         </p>

@@ -4,10 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
 import { NavbarItems } from "./NavbarItems";
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { modeItem } from "@/constant/mode";
+import { useMode } from "@/hooks/useMode";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
+  const { changeMode, mode } = useMode();
 
   const handleLogout = () => {
     dispatch(logOut());
@@ -15,7 +19,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar bg-base-100 container mx-auto">
+      <nav className="navbar bg-base-100 dark:bg-black container mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -53,15 +57,24 @@ const Navbar = () => {
                 src={logo}
                 alt=""
               />
-              <p className="hover:text-black flex gap-2">
-                <span className="text-[#49af88] font-extrabold">Rental</span>
+              <p className="hover:text-black dark:text-black flex gap-2">
+                <span className="text-[#49af88] dark:text-white font-extrabold">
+                  Rental
+                </span>
                 Car
               </p>
             </div>
           </NavLink>
         </div>
 
-        <div className="navbar-end">
+        <div className="navbar-end space-x-3">
+          <Button
+            className="bg-white text-slate-800 hover:bg-white"
+            onClick={changeMode}
+          >
+            {mode === modeItem.DARK ? <SunIcon /> : <MoonIcon />}
+          </Button>
+
           {!user ? (
             <NavLink to={"/signIn"}>
               <Button className="bg-white text-black hover:bg-white">
@@ -78,7 +91,7 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-      <nav className="navbar lg:flex lg:justify-center lg:items-center bg-base-100 hidden lg:visible">
+      <nav className="navbar lg:flex lg:justify-center lg:items-center bg-base-100 dark:bg-transparent hidden lg:visible">
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 space-x-2">
             <NavbarItems />

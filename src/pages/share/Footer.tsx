@@ -2,7 +2,7 @@ import logo from "../../assets/images/preview (1).png";
 
 const Footer = () => {
   return (
-    <div className="text-center bg-base-200 py-8">
+    <div className="text-center bg-base-200 dark:bg-black py-8">
       <footer className="footer flex flex-col md:flex-row items-center justify-between container mx-auto">
         <aside className="text-left md:text-center">
           {/* Logo and name */}
@@ -21,7 +21,9 @@ const Footer = () => {
           <form>
             <fieldset className="form-control w-80 mx-auto">
               <label className="label">
-                <span className="label-text">Enter your email address</span>
+                <span className="label-text dark:text-white">
+                  Enter your email address
+                </span>
               </label>
               <div className="flex space-x-2">
                 <input
@@ -29,7 +31,7 @@ const Footer = () => {
                   placeholder="username@site.com"
                   className="input input-bordered flex-grow"
                 />
-                <button className="btn btn-primary bg-[#00712D]">
+                <button className="btn bg-[#00712D] text-white hover:bg-[#00712D] dark:bg-white dark:text-black">
                   Subscribe
                 </button>
               </div>
@@ -39,8 +41,8 @@ const Footer = () => {
 
         {/* Social Media Links */}
         <nav className="text-black mt-6 md:mt-0">
-          <h6 className="footer-title mb-4">Follow Us</h6>
-          <div className="grid grid-flow-col gap-6">
+          <h6 className="footer-title mb-4 dark:text-white">Follow Us</h6>
+          <div className="grid grid-flow-col gap-6 dark:text-white">
             <a href="https://x.com/CampersShop" aria-label="Twitter">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +85,7 @@ const Footer = () => {
 
       {/* Ownership, Privacy Policy, and Contact Info */}
       <div className="mt-6">
-        <ul className="flex flex-wrap justify-center space-x-4 text-gray-500 text-sm">
+        <ul className="flex flex-wrap justify-center space-x-4 text-gray-500 dark:text-white text-sm">
           <li>
             <a href="/privacy-policy" className="hover:underline">
               Privacy Policy
@@ -104,7 +106,7 @@ const Footer = () => {
 
       {/* Ownership section with dynamic year */}
       <div className="pt-4 text-sm text-gray-500">
-        <strong>Rental Car</strong> © {new Date().getFullYear()} Created by{" "}
+        <strong>Rental Car</strong> &copy; {new Date().getFullYear()} Created by{" "}
         <span className="text-[#6A9C89]">Md Jaoadul Islam</span>
       </div>
     </div>

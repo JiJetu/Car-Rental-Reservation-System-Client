@@ -66,7 +66,7 @@ const SignUp = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+      <div className="w-full max-w-md bg-white dark:bg-[#1a1919] p-8 rounded-lg shadow-lg dark:border-2 dark:border-[#4d4b4b]">
         <h2 className="text-2xl font-bold text-center">Sign Up</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
           <div>
@@ -154,7 +154,7 @@ const SignUp = () => {
               {...register("termsAccepted", {
                 required: "You must accept the terms and conditions",
               })}
-              className="checkbox"
+              className="checkbox dark:bg-white"
             />
             <span className="ml-2">
               I accept the{" "}

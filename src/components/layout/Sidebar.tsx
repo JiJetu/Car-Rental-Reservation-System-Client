@@ -66,7 +66,7 @@ const Sidebar = () => {
               src={logo}
               alt=""
             />
-            <p className="hover:text-black flex gap-2 text-base">
+            <p className="hover:text-white flex gap-2 text-base">
               <span className="text-[#49af88] font-extrabold">Rental</span>
               Car
             </p>

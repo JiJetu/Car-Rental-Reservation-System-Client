@@ -1,6 +1,8 @@
-import { Form, Upload, Button } from "antd";
+import { Form, Upload, Button, Typography } from "antd";
 import { Controller } from "react-hook-form";
 import { UploadOutlined } from "@ant-design/icons";
+
+const { Text } = Typography;
 
 type TCustomImageFileProps = {
   name: string;
@@ -16,7 +18,13 @@ const CustomImageFile = ({ name, label }: TCustomImageFileProps) => {
           field: { onChange, value, ...field },
           fieldState: { error },
         }) => (
-          <Form.Item label={label}>
+          <Form.Item
+            label={
+              <Text strong className="dark:text-white">
+                {label}
+              </Text>
+            }
+          >
             <Upload
               {...field}
               accept="image/*"

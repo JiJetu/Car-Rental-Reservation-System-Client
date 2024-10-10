@@ -1,7 +1,8 @@
-import { Form, Input } from "antd";
+import { Form, Input, Typography } from "antd";
 import { Controller } from "react-hook-form";
 
 const { TextArea } = Input;
+const { Text } = Typography;
 
 type TCustomTextAreaProps = {
   name: string;
@@ -21,7 +22,13 @@ const CustomTextArea = ({
       <Controller
         name={name}
         render={({ field, fieldState: { error } }) => (
-          <Form.Item label={label}>
+          <Form.Item
+            label={
+              <Text strong className="dark:text-white">
+                {label}
+              </Text>
+            }
+          >
             <TextArea
               {...field}
               placeholder={`Enter your ${placeholderText}`}
