@@ -51,23 +51,21 @@ const Navbar = () => {
             to={"/"}
             className="text-base md:text-xl font-semibold font-serif"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center md:gap-2">
               <img
-                className="h-[40px] w-[40px] md:h-[70px] md:w-[70px]"
+                className="h-[30px] w-[30px] md:h-[70px] md:w-[70px]"
                 src={logo}
                 alt=""
               />
-              <p className="hover:text-black dark:text-black flex gap-2">
-                <span className="text-[#49af88] dark:text-white font-extrabold">
-                  Rental
-                </span>
+              <p className="flex gap-2">
+                <span className="text-[#49af88] font-extrabold">Rental</span>
                 Car
               </p>
             </div>
           </NavLink>
         </div>
 
-        <div className="navbar-end space-x-3">
+        <div className="navbar-end space-x-1 md:space-x-3">
           <Button
             className="bg-white text-slate-800 hover:bg-white"
             onClick={changeMode}

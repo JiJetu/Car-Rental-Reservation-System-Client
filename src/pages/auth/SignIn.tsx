@@ -13,8 +13,19 @@ const defaultValues = {
   password: "password123",
 };
 
+type TValidateErrorProps = {
+  data: {
+    errorMessages: [];
+    message: string;
+    stack: string;
+    success: boolean;
+  };
+};
+
 const SignIn = () => {
-  const [login] = useLoginMutation();
+  const [login, { error }] = useLoginMutation();
+  const validateError = error as TValidateErrorProps;
+  console.log(validateError);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {
@@ -66,6 +77,9 @@ const SignIn = () => {
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
             )}
+            {validateError?.data?.message === "user not found" && (
+              <p className="text-red-500 text-sm">Invalid email</p>
+            )}
           </div>
 
           {/* Password Field */}
@@ -79,6 +93,11 @@ const SignIn = () => {
             />
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
+            {validateError?.data?.message === "Invalid password" && (
+              <p className="text-red-500 text-sm">
+                {validateError?.data?.message}
+              </p>
             )}
           </div>
 

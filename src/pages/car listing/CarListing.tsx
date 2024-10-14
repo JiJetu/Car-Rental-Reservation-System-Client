@@ -4,14 +4,13 @@ import { useGetAllCarsQuery } from "@/redux/features/admin/carApi";
 import { useState } from "react";
 import CarFilters from "./CarFilters";
 import CarCard from "@/components/share/CarCard";
+import Loading from "@/components/share/Loading";
 
 const CarListing = () => {
   const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
-  const { data: carsData } = useGetAllCarsQuery(params);
+  const { data: carsData, isFetching } = useGetAllCarsQuery(params);
 
-  console.log(carsData);
-
-  const cars = carsData?.data || [];
+  const cars = carsData?.data;
 
   const handleFilterSubmit: SubmitHandler<FieldValues> = (data) => {
     const queryParams: TQueryParam[] = [];
@@ -47,14 +46,22 @@ const CarListing = () => {
   return (
     <div className="container mx-auto">
       <div className="p-4">
-        <CarFilters onSubmit={handleFilterSubmit} />
+        <CarFilters loading={isFetching} onSubmit={handleFilterSubmit} />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-        {cars.map((car) => (
-          <CarCard key={car._id} car={car} />
-        ))}
-      </div>
+      {isFetching ? (
+        <Loading />
+      ) : cars?.length === 0 ? (
+        <div className="text-2xl dark:text-red-600 font-bold p-5 flex justify-center items-center">
+          <p>-----Sorry no car found-----</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+          {cars?.map((car) => (
+            <CarCard key={car._id} car={car} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

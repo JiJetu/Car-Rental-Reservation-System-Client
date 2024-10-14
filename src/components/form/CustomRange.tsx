@@ -28,7 +28,6 @@ const CustomRange = ({ label, name, min, max }: TCustomRangeProps) => {
             max={max}
             defaultValue={[min, max]}
             onChange={field.onChange}
-            value={field.value || [min, max]}
           />
           <div className="flex justify-between text-gray-500 dark:text-black">
             <span className="dark:text-white">${min}</span>

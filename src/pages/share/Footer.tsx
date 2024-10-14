@@ -25,13 +25,13 @@ const Footer = () => {
                   Enter your email address
                 </span>
               </label>
-              <div className="flex space-x-2">
+              <div className="flex">
                 <input
                   type="text"
                   placeholder="username@site.com"
-                  className="input input-bordered flex-grow"
+                  className="input input-bordered flex-grow rounded-r-none"
                 />
-                <button className="btn bg-[#00712D] text-white hover:bg-[#00712D] dark:bg-white dark:text-black">
+                <button className="btn bg-[#00712D] text-white hover:bg-[#00712D] dark:bg-black border-[#00712D] rounded-l-none">
                   Subscribe
                 </button>
               </div>

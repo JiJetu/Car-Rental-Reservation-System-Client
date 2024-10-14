@@ -1,23 +1,25 @@
 import CustomForm from "@/components/form/CustomForm";
 import CustomRange from "@/components/form/CustomRange";
 import CustomSelect from "@/components/form/CustomSelect";
+import { Button } from "@/components/ui/button";
 import {
   carColorOptions,
   carFeaturesOptions,
   carTypeOptions,
 } from "@/constant/manageCar";
-import { Button, Col, Row } from "antd";
+import { Col, Row } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 
 type CarFiltersProps = {
   onSubmit: SubmitHandler<FieldValues>;
+  loading: boolean;
 };
 
-const CarFilters = ({ onSubmit }: CarFiltersProps) => {
+const CarFilters = ({ onSubmit, loading }: CarFiltersProps) => {
   return (
     <Row>
       <Col span={24}>
-        <CustomForm onSubmit={onSubmit}>
+        <CustomForm resetFrom={false} onSubmit={onSubmit}>
           <Row gutter={8}>
             <Col span={24} lg={{ span: 8 }}>
               <CustomSelect
@@ -57,8 +59,9 @@ const CarFilters = ({ onSubmit }: CarFiltersProps) => {
 
           <Row justify={"center"} align={"middle"}>
             <Button
-              htmlType="submit"
-              className="btn bg-[#00712D] dark:bg-white text-white dark:text-black mt-4"
+              disabled={loading}
+              type="submit"
+              className="btn bg-[#00712D] hover:bg-[#00712D] dark:bg-white text-white dark:text-black"
             >
               Apply Filters
             </Button>
