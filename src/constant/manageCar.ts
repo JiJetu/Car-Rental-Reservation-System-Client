@@ -16,3 +16,9 @@ export const carTypeOptions = [
   { value: "Hybrid", label: "Hybrid" },
   { value: "Sedan", label: "Sedan" },
 ];
+
+export const additionalFeaturesOptions = [
+  { value: "Insurance", label: "Insurance" },
+  { value: "GPSgps", label: "GPS" },
+  { value: "Child_Seat", label: "Child Seat" },
+];

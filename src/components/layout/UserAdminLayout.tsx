@@ -28,7 +28,7 @@ const UserAdminLayout = () => {
           mode === modeItem.DARK ? "dark:bg-[#1a1919]" : "bg-[#f0f2f5]"
         }`}
       >
-        <Sidebar />
+        <Sidebar mode={mode} />
         <Layout>
           <Header
             className={`flex justify-between items-center px-6 shadow-sm ${

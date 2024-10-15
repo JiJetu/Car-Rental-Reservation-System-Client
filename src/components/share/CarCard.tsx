@@ -6,6 +6,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { TCar } from "@/tyeps";
+import { MdCancel } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 type TCarProps = {
@@ -25,7 +26,14 @@ const CarCard = ({ car }: TCarProps) => {
             />
           </CardHeader>
           <CardContent className="p-4 flex-grow">
-            <CardTitle className="text-2xl font-bold">{car.name}</CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-2xl font-bold">{car.name}</CardTitle>
+              {car.isDeleted === true && (
+                <div className="text-2xl text-red-700 flex items-center gap-2">
+                  <MdCancel /> Deleted
+                </div>
+              )}
+            </div>
             <p className="text-gray-700 dark:text-white mt-2">
               {car.shortDescription}
             </p>

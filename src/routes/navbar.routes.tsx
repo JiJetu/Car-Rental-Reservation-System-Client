@@ -38,6 +38,10 @@ export const mainPath = [
   },
   {
     path: "car/:id",
-    element: <CarDetails />,
+    element: (
+      <ProtectedRoute>
+        <CarDetails />
+      </ProtectedRoute>
+    ),
   },
 ];

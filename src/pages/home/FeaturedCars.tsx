@@ -10,7 +10,7 @@ import { useGetAllCarsQuery } from "@/redux/features/admin/carApi";
 import { TCar } from "@/tyeps/car.types";
 
 const FeaturedCars = () => {
-  const { data: carsData } = useGetAllCarsQuery(undefined);
+  const { data: carsData, isError } = useGetAllCarsQuery(undefined);
   const cars = carsData?.data;
 
   return (
@@ -23,9 +23,9 @@ const FeaturedCars = () => {
 
         <div className="max-w-[85%] md:max-w-full mx-auto">
           <Carousel opts={{ align: "start" }} className="mx-5 md:mx-14">
-            {cars && cars.length > 0 ? (
+            {(cars && cars.length > 0) || isError ? (
               <CarouselContent>
-                {cars.map((car: TCar) => (
+                {cars?.map((car: TCar) => (
                   <CarouselItem
                     key={car._id}
                     className="my-4 md:basis-1/2 lg:basis-1/4 mx-auto"
@@ -35,8 +35,8 @@ const FeaturedCars = () => {
                 ))}
               </CarouselContent>
             ) : (
-              <div className="bg-white text-2xl font-bold p-5 flex justify-center items-center">
-                <p>No featured cars available. Please add more cars.</p>
+              <div className="bg-white text-xl text-red-600 border border-red-600 font-bold p-5 flex justify-center items-center">
+                <p>No featured cars available.</p>
               </div>
             )}
             {cars && cars.length > 0 && <CarouselPrevious />}

@@ -39,19 +39,15 @@ const CustomForm = ({
 
   const submit: SubmitHandler<FieldValues> = (data) => {
     onSubmit(data);
-    methods.reset();
+
+    if (resetFrom) {
+      methods.reset();
+    }
   };
 
   return (
     <FormProvider {...methods}>
-      <Form
-        layout="vertical"
-        onFinish={
-          resetFrom
-            ? methods.handleSubmit(submit)
-            : methods.handleSubmit(onSubmit)
-        }
-      >
+      <Form layout="vertical" onFinish={methods.handleSubmit(submit)}>
         {children}
       </Form>
     </FormProvider>

@@ -10,10 +10,15 @@ import { adminPaths } from "@/routes/admin.routes";
 import { userPaths } from "@/routes/user.routes";
 import { navItemsGenerator } from "@/utils/navItemsGenerator";
 import { mainPath } from "@/routes/navbar.routes";
+import { modeItem } from "@/constant/mode";
 
 const { Sider } = Layout;
 
-const Sidebar = () => {
+type TSidebarProps = {
+  mode: string;
+};
+
+const Sidebar = ({ mode }: TSidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const user = useAppSelector(selectCurrentUser);
   let sidebarItems;
@@ -32,6 +37,7 @@ const Sidebar = () => {
 
   return (
     <Sider
+      theme="light"
       breakpoint="lg"
       collapsedWidth="0"
       collapsible
@@ -45,6 +51,7 @@ const Sidebar = () => {
         zIndex: 999,
         boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)",
       }}
+      className={mode === modeItem.DARK ? "dark:bg-[#1a1919]" : "bg-white"}
     >
       {/* Logo Section */}
       <div
@@ -66,7 +73,7 @@ const Sidebar = () => {
               src={logo}
               alt=""
             />
-            <p className="hover:text-white flex gap-2 text-base">
+            <p className="text-black dark:text-white flex gap-2 text-base">
               <span className="text-[#49af88] font-extrabold">Rental</span>
               Car
             </p>
@@ -75,13 +82,17 @@ const Sidebar = () => {
       </div>
 
       {/* Sidebar Menu */}
-      <Menu theme="dark" mode="inline" items={sidebarItems} />
+      <Menu
+        theme={mode === modeItem.DARK ? "dark" : "light"}
+        mode="inline"
+        items={sidebarItems}
+      />
 
       <div className="divider divider-success p-2"></div>
 
       {/* Additional Nav Items */}
       <Menu
-        theme="dark"
+        theme={mode === modeItem.DARK ? "dark" : "light"}
         mode="inline"
         defaultSelectedKeys={["4"]}
         items={navItemsGenerator(mainPath)}

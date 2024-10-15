@@ -93,7 +93,7 @@ const AddCar = () => {
       align="middle"
       style={{ minHeight: "100vh", marginBottom: "15px" }}
     >
-      <Col span={12}>
+      <Col span={24} md={{ span: 12 }}>
         <CustomForm
           onSubmit={onSubmit}
           defaultValues={defaultValues}
