@@ -23,9 +23,11 @@ const CustomInput = ({
         render={({ field, fieldState: { error } }) => (
           <Form.Item
             label={
-              <Text strong className="dark:text-white">
-                {label}
-              </Text>
+              label && (
+                <Text strong className="dark:text-white">
+                  {label}
+                </Text>
+              )
             }
             validateStatus={error ? "error" : ""}
           >
@@ -34,7 +36,7 @@ const CustomInput = ({
               type={type}
               id={name}
               size="large"
-              placeholder={`Enter your ${placeholderText}`}
+              placeholder={placeholderText && `Enter with ${placeholderText}`}
             />
             {error && <p style={{ color: "red" }}>{error.message}</p>}
           </Form.Item>

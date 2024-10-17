@@ -4,36 +4,44 @@ import { Controller } from "react-hook-form";
 const { Text } = Typography;
 
 type TCustomSelectProps = {
-  label: string;
+  label?: string;
+  placeholder?: string;
   name: string;
   options: { value: string; label: string; disabled?: boolean }[];
   multiple?: boolean;
+  rules?: any;
 };
 
 const CustomSelect = ({
   label,
+  placeholder,
   name,
   options,
   multiple = false,
+  rules,
 }: TCustomSelectProps) => {
   return (
     <Controller
       name={name}
+      rules={rules && rules}
       render={({ field, fieldState: { error } }) => (
         <Form.Item
           label={
-            <Text strong className="dark:text-white">
-              {label}
-            </Text>
+            label && (
+              <Text strong className="dark:text-white">
+                {label}
+              </Text>
+            )
           }
         >
           <Select
             mode={multiple ? "multiple" : undefined}
             // defaultValue={options[0].label}
-            style={{ width: "100%" }}
+            style={{ width: "100%", height: "100%" }}
             size="large"
             {...field}
             options={options}
+            placeholder={placeholder}
           />
           {error && <p style={{ color: "red" }}>{error.message}</p>}
         </Form.Item>

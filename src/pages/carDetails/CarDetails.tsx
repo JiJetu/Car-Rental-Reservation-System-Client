@@ -1,21 +1,21 @@
-import { Alert, Checkbox, Skeleton, Tag } from "antd";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { Alert, Skeleton, Tag } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
 import { CarStatus, TCar } from "@/tyeps";
-import { useGetSingleCarQuery } from "@/redux/features/admin/carApi";
 import ReactImageMagnifier from "simple-image-magnifier/react";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button } from "@/components/ui/button";
 import { additionalFeaturesOptions } from "@/constant/manageCar";
-// import logo from "../../assets/images/pexels-mikebirdy-244206.jpg";
+import CustomForm from "@/components/form/CustomForm";
+import CustomCheckbox from "@/components/form/CustomCheckbox";
+import { FieldValues, SubmitHandler } from "react-hook-form";
+import { useAppDispatch } from "@/redux/hooks";
+import { useGetSingleCarQuery } from "@/redux/features/admin/carApi";
 
 const CarDetails = () => {
   const { id } = useParams();
   const { data: carData, isFetching, isError } = useGetSingleCarQuery(id);
-  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
-
-  console.log(selectedFeatures);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   if (isFetching) {
     return (
@@ -48,23 +48,20 @@ const CarDetails = () => {
     carImage,
   } = carData?.data as TCar;
 
-  const handleBookNow = () => {
-    Swal.fire({
-      title: "Book Now",
-      text: "Would you like to proceed to the booking page?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, proceed",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = `/booking/${id}`;
-      }
-    });
-  };
+  const filteredAdditionalFeaturesOptions = additionalFeaturesOptions.filter(
+    (option) => !features.includes(option.value)
+  );
 
-  const handleFeatureChange = (value: string[]) => {
-    setSelectedFeatures(value);
+  const handleBookNow: SubmitHandler<FieldValues> = (data) => {
+    const bookingData = {
+      bookingInfo: {
+        additionalFeatures: data.additionalFeatures || [],
+      },
+    };
+
+    // const res = dispatch(setBookingInfo(bookingData));
+    // console.log(res);
+    navigate(`/booking`);
   };
 
   return (
@@ -120,22 +117,22 @@ const CarDetails = () => {
           </ul>
 
           {/* additional features with Checkbox group */}
-          <div className="my-6">
-            <h2 className="text-lg font-bold">Select Additional Features:</h2>
-            <Checkbox.Group
-              options={additionalFeaturesOptions}
-              value={selectedFeatures}
-              onChange={handleFeatureChange}
-              className="w-full mt-4"
+          <h2 className="text-lg font-bold mt-6 mb-2">
+            Select Additional Features:
+          </h2>
+          <CustomForm onSubmit={handleBookNow} resetFrom={false}>
+            <CustomCheckbox
+              name="additionalFeatures"
+              options={filteredAdditionalFeaturesOptions}
             />
-          </div>
 
-          <Button
-            onClick={handleBookNow}
-            className="bg-[#00712D] text-lg px-6 hover:bg-[#005B21] text-white"
-          >
-            Book Now
-          </Button>
+            <Button
+              type="submit"
+              className="bg-[#00712D] text-lg px-6 hover:bg-[#005B21] text-white"
+            >
+              Book Now
+            </Button>
+          </CustomForm>
         </div>
       </div>
 

@@ -28,10 +28,10 @@ const carApi = baseApi.injectEndpoints({
       },
     }),
     getSingleCar: builder.query({
-      query: (id) => ({
-        url: `/cars/${id}`,
-        method: "GET",
-      }),
+      query: (id) => {
+        console.log(id);
+        return { url: `/cars/${id}`, method: "GET" };
+      },
     }),
     addCar: builder.mutation({
       query: (data) => ({

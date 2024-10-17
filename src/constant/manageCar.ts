@@ -19,6 +19,20 @@ export const carTypeOptions = [
 
 export const additionalFeaturesOptions = [
   { value: "Insurance", label: "Insurance" },
-  { value: "GPSgps", label: "GPS" },
   { value: "Child_Seat", label: "Child Seat" },
+  ...carFeaturesOptions,
 ];
+
+export const carLocationOptions = [
+  { value: "Dhaka", label: "Dhaka" },
+  { value: "Notunbazar", label: "Notunbazar" },
+  { value: "Rampura", label: "Rampura" },
+  { label: "Jatrabari", value: "Jatrabari" },
+  { label: "Bosundhora", value: "Bosundhora" },
+  { label: "Demra", value: "Demra" },
+];
+
+export const TypeOfUpdateQuantity = {
+  increment: "increment",
+  decrement: "decrement",
+} as const;

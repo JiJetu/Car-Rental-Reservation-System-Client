@@ -1,26 +1,18 @@
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
-
-type TSearchFormData = {
-  location: string;
-  startDate: string;
-  endDate: string;
-};
+import CustomForm from "@/components/form/CustomForm";
+import CustomSelect from "@/components/form/CustomSelect";
+import { carLocationOptions } from "@/constant/manageCar";
+import { Button } from "@/components/ui/button";
+import CustomDate from "@/components/form/CustomDate";
+import { Col, Row } from "antd";
+import bgImage from "../../assets/images/1-19.jpg";
 
 const Hero = () => {
   const [today, setToday] = useState<string>("");
   const [minEndDate, setMinEndDate] = useState<string>("");
 
-  // components for react hook form
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<TSearchFormData>();
-
-  // initialize today and minimum 4 days end date
+  // Initialize today and minimum 4 days end date
   useEffect(() => {
     const todayDate = new Date();
     const todayString = todayDate.toISOString().split("T")[0];
@@ -29,29 +21,10 @@ const Hero = () => {
     todayDate.setDate(todayDate.getDate() + 4);
     const endDateString = todayDate.toISOString().split("T")[0];
     setMinEndDate(endDateString);
+  }, []);
 
-    setValue("startDate", todayString);
-    setValue("endDate", endDateString);
-  }, [setValue]);
-
-  const startDate = watch("startDate", today);
-
-  useEffect(() => {
-    if (startDate) {
-      const fourDaysLater = new Date(startDate);
-      fourDaysLater.setDate(fourDaysLater.getDate() + 4);
-      const minEndDateString = fourDaysLater.toISOString().split("T")[0];
-      setMinEndDate(minEndDateString);
-
-      const endDate = watch("endDate");
-      if (endDate && endDate < minEndDateString) {
-        setValue("endDate", minEndDateString);
-      }
-    }
-  }, [startDate, setValue, watch]);
-
-  // form submission for react hook form
-  const onSubmit: SubmitHandler<TSearchFormData> = (data) => {
+  // Form submission handler
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
   };
 
@@ -59,8 +32,7 @@ const Hero = () => {
     <section
       className="relative bg-cover bg-center md:h-screen"
       style={{
-        backgroundImage:
-          "url('https://carfromjapan.com/wp-content/uploads/2019/03/1-19.jpg')",
+        backgroundImage: `url(${bgImage})`,
       }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
@@ -73,50 +45,55 @@ const Hero = () => {
           Find the best cars for your journey and book now!
         </p>
 
-        {/* form for searching car */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col md:flex-row justify-between items-center bg-white bg-opacity-20 h-fit md:bg-opacity-90 p-4 md:p-6 rounded-lg shadow-lg space-y-4 md:space-y-0 md:space-x-4 w-full md:w-fit md:max-w-4xl mb-2 md:mb-0 text-black"
-        >
-          <input
-            type="text"
-            {...register("location", { required: "Location is required" })}
-            placeholder="Enter the location"
-            className="p-3 rounded-lg w-full md:w-auto"
-          />
-          {errors.location && (
-            <span className="text-red-500">{errors.location.message}</span>
-          )}
+        <div className="bg-white bg-opacity-20 h-fit md:bg-opacity-90 p-4 md:p-6 rounded-lg shadow-lg space-y-4 md:space-y-0 w-full md:w-[700px] md:max-w-screen mb-2 md:mb-0 text-black">
+          {/* Form for searching car */}
+          <CustomForm onSubmit={onSubmit}>
+            <Row
+              gutter={8}
+              justify="center"
+              align="middle"
+              style={{
+                width: "100%",
+              }}
+            >
+              <Col span={24} md={{ span: 7 }} className="md:-mb-6 w-full">
+                <CustomSelect
+                  placeholder="Location"
+                  name="location"
+                  options={carLocationOptions}
+                  rules={{ required: "Location is required" }}
+                />
+              </Col>
 
-          <input
-            type="date"
-            {...register("startDate", { required: "Start date is required" })}
-            defaultValue={today}
-            min={today}
-            className="p-3 rounded-lg w-full md:w-auto"
-          />
-          {errors.startDate && (
-            <span className="text-red-500">{errors.startDate.message}</span>
-          )}
+              <Col span={24} md={{ span: 6 }} className="md:-mb-6 w-full">
+                <CustomDate
+                  name="startDate"
+                  placeholderText={today}
+                  minDate={today}
+                  rules={{ required: "Start date is required" }}
+                />
+              </Col>
 
-          <input
-            type="date"
-            {...register("endDate", { required: "End date is required" })}
-            defaultValue={minEndDate}
-            min={minEndDate}
-            className="p-3 rounded-lg w-full md:w-auto"
-          />
-          {errors.endDate && (
-            <span className="text-red-500">{errors.endDate.message}</span>
-          )}
+              <Col span={24} md={{ span: 6 }} className="md:-mb-6 w-full">
+                <CustomDate
+                  name="endDate"
+                  placeholderText={minEndDate}
+                  minDate={minEndDate}
+                  rules={{ required: "End date is required" }}
+                />
+              </Col>
 
-          <button
-            type="submit"
-            className="px-6 py-3 bg-[#079b62] dark:bg-black text-white rounded-lg hover:bg-[#18ac73] md:w-auto"
-          >
-            Book Now
-          </button>
-        </form>
+              <Col span={10} md={{ span: 5 }}>
+                <Button
+                  type="submit"
+                  className="w-full px-6 py-7 bg-[#079b62] dark:bg-black text-white rounded-lg hover:bg-[#18ac73]"
+                >
+                  Book Now
+                </Button>
+              </Col>
+            </Row>
+          </CustomForm>
+        </div>
       </div>
     </section>
   );

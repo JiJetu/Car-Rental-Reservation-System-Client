@@ -69,7 +69,7 @@ const CarListing = () => {
       {isFetching ? (
         <Loading />
       ) : cars?.length === 0 || isError ? (
-        <div className="text-2xl dark:text-red-600 font-bold p-5 flex justify-center items-center">
+        <div className="bg-white text-xl text-red-600 border border-red-600 font-bold p-5 flex justify-center items-center">
           <p>-----Sorry no car found-----</p>
         </div>
       ) : (

@@ -16,7 +16,7 @@ const FeaturedCars = () => {
   return (
     <section className="py-12">
       <div className="container mx-auto text-center">
-        <h2 className="text-3x md:text-4xl font-bold mb-6">Featured Cars</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-6">Featured Cars</h2>
         <p className="text-lg md:text-xl text-gray-600 mb-8 dark:text-white">
           Check out our top picks for your next journey.
         </p>
