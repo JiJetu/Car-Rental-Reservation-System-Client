@@ -45,9 +45,12 @@ const SignIn = () => {
       };
 
       const res = await login(userInfo).unwrap();
+
       const user = verifyToken(res.token) as TUser;
 
-      dispatch(setUser({ user: user, token: res.token }));
+      dispatch(
+        setUser({ user: { ...user, name: res?.data?.name }, token: res.token })
+      );
       toast.success("Logged in successful", { id: toastId, duration: 2000 });
       navigate(`/${user.role}/dashboard`);
     } catch (error) {

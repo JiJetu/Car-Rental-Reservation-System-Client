@@ -4,7 +4,6 @@ import AddCar from "@/pages/admin/manage-cars/AddCar";
 import AllCars from "@/pages/admin/manage-cars/AllCars";
 import AllReturnCars from "@/pages/admin/manage-return-cars/AllReturnCars";
 import AllUsers from "../pages/admin/manage-user/AllUsers";
-import UpdateCar from "@/pages/admin/manage-cars/UpdateCar";
 import { DashboardIcon } from "@radix-ui/react-icons";
 import { CarFilled, CarTwoTone } from "@ant-design/icons";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -36,10 +35,10 @@ export const adminPaths = [
         icon: <CarTwoTone size={20} twoToneColor="#14b3ab" />,
         element: <AllCars />,
       },
-      {
-        path: "update-cars/:id",
-        element: <UpdateCar />,
-      },
+      // {
+      //   path: "update-cars/:id",
+      //   element: <UpdateCar />,
+      // },
     ],
   },
   {

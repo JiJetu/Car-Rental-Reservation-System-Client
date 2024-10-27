@@ -4,6 +4,7 @@ import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
 import { Button } from "@/components/ui/button";
 import {
+  carColorOptions,
   carFeaturesOptions,
   carLocationOptions,
   carTypeOptions,
@@ -32,7 +33,7 @@ const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
           <Col span={24} md={{ span: 8 }}>
             <CustomSelect
               label="Features"
-              name="features"
+              name="carFeatures"
               options={carFeaturesOptions}
               multiple={true}
             />
@@ -47,16 +48,23 @@ const SearchForm = ({ onSearch, loading = false }: SearchFormProps) => {
         </Row>
 
         <Row gutter={16}>
-          <Col span={24} md={{ span: 12 }}>
+          <Col span={24} md={{ span: 8 }}>
+            <CustomSelect
+              label="Color"
+              name="carColor"
+              options={carColorOptions}
+            />
+          </Col>
+          <Col span={24} md={{ span: 8 }}>
             <CustomDate label="Pick-Up Date" name="pickUpDate" />
           </Col>
-          <Col span={24} md={{ span: 12 }}>
+          <Col span={24} md={{ span: 8 }}>
             <CustomDate label="Drop-Off Date" name="dropOffDate" />
           </Col>
         </Row>
 
-        <Row gutter={16} className="mt-4">
-          <Col span={24}>
+        <Row gutter={16} className="mt-4 flex justify-center items-center">
+          <Col span={24} md={{ span: 14 }}>
             <div className="relative">
               <CustomInput
                 name="search"

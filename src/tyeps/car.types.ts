@@ -9,6 +9,7 @@ export type TCar = {
   shortDescription: string;
   description: string;
   color: string;
+  location: string;
   type: string;
   carImage: string;
   isElectric: boolean;

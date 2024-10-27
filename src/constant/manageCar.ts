@@ -36,3 +36,14 @@ export const TypeOfUpdateQuantity = {
   increment: "increment",
   decrement: "decrement",
 } as const;
+
+export const insuranceOptions = [
+  { value: "Liability", label: "Liability Insurance" },
+  { value: "Collision", label: "Collision Insurance" },
+  { value: "Comprehensive", label: "Comprehensive Insurance" },
+  { value: "PIP", label: "Personal Injury Protection (PIP)" },
+  {
+    value: "Uninsured/Underinsured",
+    label: "Uninsured/Underinsured Motorist Coverage",
+  },
+];

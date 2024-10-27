@@ -7,8 +7,10 @@ import CustomTextArea from "@/components/form/CustomTextArea";
 import {
   carColorOptions,
   carFeaturesOptions,
+  carLocationOptions,
   carTypeOptions,
 } from "@/constant/manageCar";
+import useImageUpload from "@/hooks/useImageUpload";
 import { useAddCarMutation } from "@/redux/features/admin/carApi";
 import { addCarSchema } from "@/schemas/addCarSchema";
 import { CarStatus, TCar } from "@/tyeps";
@@ -24,6 +26,7 @@ const defaultValues = {
   description:
     "The Tesla Model 3 is a cutting-edge electric vehicle that represents the pinnacle of automotive technology and performance. With its sleek and modern design, the Model 3 captivates attention on the road while providing an eco-friendly alternative to traditional gasoline-powered cars. Its electric powertrain delivers exhilarating acceleration, allowing drivers to experience a thrilling ride without compromising on sustainability. Inside, the Tesla Model 3 boasts a spacious and minimalist interior, equipped with high-quality materials and advanced technology. The large touchscreen display serves as the control center for all vehicle functions, seamlessly integrating navigation, entertainment, and climate control. With features like Bluetooth connectivity and a premium sound system, passengers can enjoy a comfortable and connected experience.",
   color: "White",
+  location: "Dhaka",
   type: "Hybrid",
   isElectric: true,
   features: ["AC", "Bluetooth", "Long Range Battery"],
@@ -32,40 +35,27 @@ const defaultValues = {
 
 const AddCar = () => {
   const [addCar] = useAddCarMutation();
+  const { uploadImage, isUploading } = useImageUpload();
 
   const onSubmit: SubmitErrorHandler<FieldValues> = async (data) => {
     const toastId = toast.loading("Creating....");
 
     try {
-      const formData = new FormData();
-      formData.append("image", data.carImage as any);
-
-      const imgRef = await fetch(
-        `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_IMAGE_HOSTING_KEY
-        }`,
-        {
-          method: "POST",
-          body: formData,
+      let imageUrl = "" as string | null;
+      if (data.carImage) {
+        imageUrl = await uploadImage(data.carImage as File);
+        if (!imageUrl) {
+          toast.error("Image upload failed", { id: toastId, duration: 2000 });
+          return;
         }
-      );
-
-      const imgData = await imgRef.json();
-      if (!imgData.success) {
-        toast.error("Image upload failed", { id: toastId, duration: 2000 });
-        return;
       }
-
-      // image URL
-      const imageUrl = imgData.data.url;
-
-      console.log({ imageUrl });
 
       const carInfo = {
         name: data.name,
         description: data.description,
         shortDescription: data.shortDescription,
         color: data.color,
+        location: data.location,
         type: data.type,
         status: CarStatus.available,
         isElectric: data.isElectric,
@@ -137,6 +127,12 @@ const AddCar = () => {
             options={carColorOptions}
           />
 
+          <CustomSelect
+            label="Car Location"
+            name="location"
+            options={carLocationOptions}
+          />
+
           {/* car types */}
           <CustomSelect
             label="Type of car"
@@ -161,7 +157,7 @@ const AddCar = () => {
 
           <CustomImageFile name="carImage" label="Upload Car Image" />
 
-          <Button htmlType="submit" type="primary" block>
+          <Button htmlType="submit" type="primary" block loading={isUploading}>
             Add Car
           </Button>
         </CustomForm>

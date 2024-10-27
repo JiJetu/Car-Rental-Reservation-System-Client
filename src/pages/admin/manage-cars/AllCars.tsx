@@ -6,14 +6,15 @@ import { TCar, TQueryParam, TResponse } from "@/tyeps";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Button, Pagination, Table, TableColumnsType, TableProps } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import UpdateCar from "./UpdateCar";
 
 export type TTableData = Pick<
   TCar,
   | "name"
   | "color"
+  | "location"
   | "pricePerHour"
   | "features"
   | "isElectric"
@@ -24,13 +25,22 @@ export type TTableData = Pick<
 const AllCars = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [page, setPage] = useState(1);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedCar, setSelectedCar] = useState<TCar | null>(null);
+  const [deleteCar] = useDeleteCarMutation();
+
+  const handleEditCar = (car: TCar) => {
+    setSelectedCar(car);
+    setIsModalVisible(true);
+  };
+
   const { data: carsData, isFetching } = useGetAllCarsQuery([
     { name: "limit", value: 10 },
     { name: "page", value: page },
     ...params,
   ]);
+
   const metaData = carsData?.meta;
-  const [deleteCar] = useDeleteCarMutation();
 
   const handleDeleteCar = async (id: string) => {
     Swal.fire({
@@ -73,21 +83,29 @@ const AllCars = () => {
       _id,
       name,
       color,
+      location,
       features,
       pricePerHour,
       isDeleted,
       isElectric,
+      shortDescription,
+      description,
+      carImage,
       type,
     }) => ({
       key: _id,
       _id,
       name,
       color,
+      location,
       type,
       features,
       isDeleted,
       pricePerHour,
       isElectric,
+      shortDescription,
+      description,
+      carImage,
     })
   );
 
@@ -113,6 +131,37 @@ const AllCars = () => {
         {
           text: "Blue",
           value: "Blue",
+        },
+      ],
+    },
+    {
+      title: "location",
+      key: "location",
+      dataIndex: "location",
+      filters: [
+        {
+          text: "Dhaka",
+          value: "Dhaka",
+        },
+        {
+          text: "Notunbazar",
+          value: "Notunbazar",
+        },
+        {
+          text: "Rampura",
+          value: "Rampura",
+        },
+        {
+          text: "Jatrabari",
+          value: "Jatrabari",
+        },
+        {
+          text: "Bosundhora",
+          value: "Bosundhora",
+        },
+        {
+          text: "Demra",
+          value: "Demra",
         },
       ],
     },
@@ -205,12 +254,13 @@ const AllCars = () => {
       key: "x",
       render: (car) => {
         return (
-          <div>
-            <Link to={`/admin/update-cars/${car.key}`}>
-              <Button style={{ color: "blue" }}>
-                <EditFilled />
-              </Button>
-            </Link>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => handleEditCar(car)}
+              style={{ color: "blue" }}
+            >
+              <EditFilled />
+            </Button>
 
             <Button
               onClick={() => handleDeleteCar(car.key)}
@@ -265,6 +315,17 @@ const AllCars = () => {
         pageSize={metaData?.limit}
         total={metaData?.total}
       />
+
+      {selectedCar && (
+        <UpdateCar
+          visible={isModalVisible}
+          carData={selectedCar}
+          onClose={() => {
+            setIsModalVisible(false);
+            setSelectedCar(null);
+          }}
+        />
+      )}
     </>
   );
 };

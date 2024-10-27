@@ -13,6 +13,7 @@ type TBookingState = {
   };
   bookingCarInfo: {
     bookingCars: TCar[];
+    additionalOptions: [];
     selectedItems: number;
     totalPrice: number;
     tax: number;
@@ -34,6 +35,7 @@ const initialState: TBookingState = {
   },
   bookingCarInfo: {
     bookingCars: [],
+    additionalOptions: [],
     selectedItems: 0,
     totalPrice: 0,
     tax: 0,

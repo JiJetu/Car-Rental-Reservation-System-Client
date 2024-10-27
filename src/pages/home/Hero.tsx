@@ -1,5 +1,4 @@
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { useEffect, useState } from "react";
 import CustomForm from "@/components/form/CustomForm";
 import CustomSelect from "@/components/form/CustomSelect";
 import { carLocationOptions } from "@/constant/manageCar";
@@ -7,21 +6,10 @@ import { Button } from "@/components/ui/button";
 import CustomDate from "@/components/form/CustomDate";
 import { Col, Row } from "antd";
 import bgImage from "../../assets/images/1-19.jpg";
+import { useTodayAndMinEndDate } from "@/hooks/useFormTodayEndDay";
 
 const Hero = () => {
-  const [today, setToday] = useState<string>("");
-  const [minEndDate, setMinEndDate] = useState<string>("");
-
-  // Initialize today and minimum 4 days end date
-  useEffect(() => {
-    const todayDate = new Date();
-    const todayString = todayDate.toISOString().split("T")[0];
-    setToday(todayString);
-
-    todayDate.setDate(todayDate.getDate() + 4);
-    const endDateString = todayDate.toISOString().split("T")[0];
-    setMinEndDate(endDateString);
-  }, []);
+  const { today, minEndDate } = useTodayAndMinEndDate(4);
 
   // Form submission handler
   const onSubmit: SubmitHandler<FieldValues> = (data) => {

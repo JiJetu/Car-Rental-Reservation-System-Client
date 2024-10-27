@@ -2,27 +2,32 @@ import { useEffect, useState } from "react";
 import SearchForm from "./SearchForm";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useGetAllCarsQuery } from "@/redux/features/admin/carApi";
-import Loading from "@/components/share/Loading";
-import { TCar, TQueryParam } from "@/tyeps";
-import InfiniteScroll from "react-infinite-scroll-component";
-import CarCard from "@/components/share/CarCard";
+import { TCar, TQueryParam, TResponse } from "@/tyeps";
 import BookingForm from "./BookingForm";
 import BookingConfirm from "./BookingConfirm";
+import SearchResult from "./SearchResult";
+import { toast } from "sonner";
+import { useAddBookingMutation } from "@/redux/features/user/booking.api";
+import { useNavigate } from "react-router-dom";
 
 const Booking = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [prevParams, setPrevParams] = useState<TQueryParam[]>([]);
   const [selectedCar, setSelectedCar] = useState<TCar | null>(null);
-  const [bookingDetails, setBookingDetails] = useState(null);
+  const [additionalFeatures, setAdditionalFeatures] = useState<string[]>([]);
+  const [bookingDetails, setBookingDetails] = useState<any | undefined>(
+    undefined
+  );
   const [allCars, setAllCars] = useState<TCar[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [isInitialFetch, setIsInitialFetch] = useState(true);
+  const [isSearchFetching, setIsSearchFetching] = useState(false);
+  const [addBooking] = useAddBookingMutation();
+  const navigate = useNavigate();
 
   const {
     data: carsData,
     isFetching,
-    isLoading,
     isError,
   } = useGetAllCarsQuery([
     { name: "limit", value: 10 },
@@ -33,18 +38,28 @@ const Booking = () => {
 
   useEffect(() => {
     if (!isFetching && carsData && carsData.data) {
-      // Ensure carsData and carsData.data are not undefined
       if (page === 1) {
-        setAllCars(carsData.data ?? []); // Reset cars on the first page
+        setAllCars(carsData.data ?? []);
       } else if (carsData.data.length) {
         setAllCars((prevCars) => [...prevCars, ...(carsData?.data ?? [])]);
       }
 
       if (carsData.data.length < 10 || isError) {
-        setHasMore(false); // Stop fetching if no more cars
+        setHasMore(false);
+      }
+
+      if (isSearchFetching) {
+        setIsSearchFetching(false);
       }
     }
-  }, [carsData, page, isError, isFetching]);
+  }, [
+    carsData,
+    page,
+    isError,
+    isFetching,
+    isSearchFetching,
+    setIsSearchFetching,
+  ]);
 
   const loadMoreCars = () => {
     if (!isFetching && hasMore) {
@@ -87,68 +102,95 @@ const Booking = () => {
     const isSameParams =
       JSON.stringify(prevParams) === JSON.stringify(queryParams);
     if (!isSameParams) {
-      setParams(queryParams); // Set new params
-      setPrevParams(queryParams); // Track previous params
-      setAllCars([]); // Reset the car list
-      setPage(1); // Reset page to 1
-      setHasMore(true); // Reset infinite scroll state
-      setIsInitialFetch(false); // Track that search is initiated
+      setParams(queryParams);
+      setPrevParams(queryParams);
+      setAllCars([]);
+      setPage(1);
+      setHasMore(true);
+      setIsSearchFetching(true);
     }
   };
 
-  const handleCarSelect = (car: TCar) => {
+  const handleConfirmBooking = (car: TCar) => {
+    console.log("Booking confirmed for car:", car);
     setSelectedCar(car);
+    // setAdditionalFeatures(addFeatures);
   };
 
-  const handleBookingSubmit = (data: FieldValues) => {
-    // const bookingInfo = {
-    //   ...data,
-    //   carName: selectedCar?.name,
-    //   totalPrice:
-    //     selectedCar?.pricePerDay *
-    //     calculateDays(data.pickUpDate, data.dropOffDate),
-    // };
-    setBookingDetails(data);
+  const handleBookingSubmit: SubmitHandler<FieldValues> = (data) => {
+    setAdditionalFeatures(data.additionalFeatures);
+    const time = data.startTime.format("HH:mm");
+    const bookingInfo = {
+      ...data,
+      selectedCar,
+      startTime: time,
+    };
+
+    setBookingDetails(bookingInfo as any);
+  };
+
+  const handleFinalizeBooking = async () => {
+    const toastId = toast.loading("Creating....");
+
+    const bookingInfo = {
+      carId: selectedCar?._id,
+      date: bookingDetails?.pickUpDate,
+      startTime: bookingDetails?.startTime,
+    };
+
+    try {
+      const res = (await addBooking(bookingInfo)) as TResponse<any>;
+
+      console.log(res);
+
+      if (res?.error) {
+        toast.error(res?.error?.data?.message, { id: toastId, duration: 2000 });
+      }
+
+      toast.success(
+        "Your request have received, But please wait for confirm your request",
+        { id: toastId, duration: 5000 }
+      );
+
+      navigate("/user/booking-history");
+    } catch (error) {
+      toast.error("something went wrong", { id: toastId, duration: 2000 });
+    }
   };
 
   return (
     <div className="container mx-auto p-6">
       {!selectedCar && !bookingDetails && (
-        <SearchForm onSearch={handleSearch} loading={isFetching} />
+        <>
+          <SearchForm onSearch={handleSearch} loading={isFetching} />
+          <div className="container mx-auto p-6">
+            <SearchResult
+              handleConfirmBooking={handleConfirmBooking}
+              allCars={allCars}
+              isFetching={isFetching}
+              hasMore={hasMore}
+              isSearchFetching={isSearchFetching}
+              loadMoreCars={loadMoreCars}
+            />
+          </div>
+        </>
       )}
 
-      <div className="container mx-auto p-6">
-        <InfiniteScroll
-          dataLength={allCars.length}
-          next={loadMoreCars}
-          hasMore={hasMore}
-          loader={<Loading />}
-        >
-          {isFetching && isInitialFetch ? (
-            <div className="bg-white text-xl text-green-600 border border-green-600 font-bold p-5 flex justify-center items-center">
-              <p>Data fetching.</p>
-            </div>
-          ) : allCars.length === 0 ? (
-            <div className="bg-white text-xl text-red-600 border border-red-600 font-bold p-5 flex justify-center items-center">
-              <p>No car Found.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {allCars.map((car) => (
-                <CarCard key={car._id} car={car} />
-              ))}
-            </div>
-          )}
-        </InfiniteScroll>
-      </div>
       {selectedCar && !bookingDetails && (
         <BookingForm
           selectedCar={selectedCar}
+          additionalFeatures={additionalFeatures}
           onBookingSubmit={handleBookingSubmit}
         />
       )}
 
-      {bookingDetails && <BookingConfirm bookingDetails={bookingDetails} />}
+      {bookingDetails && (
+        <BookingConfirm
+          additionalFeatures={additionalFeatures}
+          handleFinalizeBooking={handleFinalizeBooking}
+          bookingDetails={bookingDetails}
+        />
+      )}
     </div>
   );
 };

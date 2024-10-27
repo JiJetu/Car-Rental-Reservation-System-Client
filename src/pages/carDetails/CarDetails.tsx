@@ -2,7 +2,11 @@ import { Alert, Skeleton, Tag } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { CarStatus, TCar } from "@/tyeps";
 import ReactImageMagnifier from "simple-image-magnifier/react";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  EnvironmentOutlined,
+} from "@ant-design/icons";
 import { Button } from "@/components/ui/button";
 import { additionalFeaturesOptions } from "@/constant/manageCar";
 import CustomForm from "@/components/form/CustomForm";
@@ -10,6 +14,7 @@ import CustomCheckbox from "@/components/form/CustomCheckbox";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useAppDispatch } from "@/redux/hooks";
 import { useGetSingleCarQuery } from "@/redux/features/admin/carApi";
+import { FaBolt } from "react-icons/fa6";
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -42,6 +47,8 @@ const CarDetails = () => {
     name,
     features,
     shortDescription,
+    location,
+    isElectric,
     pricePerHour,
     status,
     description,
@@ -82,6 +89,7 @@ const CarDetails = () => {
         {/* car info */}
         <div className="w-full md:w-2/5 mt-8 md:mt-0 md:ml-8">
           <h1 className="text-3xl font-extrabold">{name}</h1>
+
           <div className="flex items-center space-x-3 my-4">
             <Tag
               color={status === CarStatus.available ? "green" : "red"}
@@ -96,10 +104,25 @@ const CarDetails = () => {
             >
               {status === CarStatus.available ? "Available" : "Unavailable"}
             </Tag>
+
+            {/* Price */}
             <p className="text-lg font-semibold text-gray-600 dark:text-gray-300">
               $ {pricePerHour} <span className="text-sm">/ hour</span>
             </p>
           </div>
+
+          {/* Location */}
+          <div className="flex items-center text-lg text-gray-600 dark:text-gray-300 space-x-2 mb-4">
+            <EnvironmentOutlined /> <span>{location}</span>
+          </div>
+
+          {/* Electric Badge */}
+          {isElectric && (
+            <div className="flex items-center space-x-2 mb-4 text-lg text-green-600">
+              <FaBolt className="text-yellow-400" />{" "}
+              <span>Electric Vehicle</span>
+            </div>
+          )}
 
           <p className="text-2xl font-bold mb-4">{shortDescription}</p>
 
@@ -117,8 +140,11 @@ const CarDetails = () => {
           </ul>
 
           {/* additional features with Checkbox group */}
-          <h2 className="text-lg font-bold mt-6 mb-2">
-            Select Additional Features:
+          <h2 className="text-lg font-bold mt-6 mb-2 flex items-center">
+            Select Additional Features:{" "}
+            <span className="text-xs font-medium text-gray-600">
+              ( Each features will cost $20 extra )
+            </span>
           </h2>
           <CustomForm onSubmit={handleBookNow} resetFrom={false}>
             <CustomCheckbox

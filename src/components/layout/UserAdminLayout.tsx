@@ -8,6 +8,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import { useMode } from "@/hooks/useMode";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { modeItem } from "@/constant/mode";
+import { useEffect, useState } from "react";
+import moment from "moment";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -15,7 +17,17 @@ const { Title } = Typography;
 const UserAdminLayout = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
+
   const { changeMode, mode } = useMode();
+
+  const [currentDateTime, setCurrentDateTime] = useState(moment());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(moment());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleLogout = () => {
     dispatch(logOut());
@@ -35,13 +47,24 @@ const UserAdminLayout = () => {
               mode === modeItem.DARK ? "dark:bg-[#1a1919]" : "bg-white"
             }`}
           >
-            <Title level={3} style={{ margin: 0, color: "#001529" }}>
-              <span className="dark:text-white">
-                {user?.role === "admin"
-                  ? "Admin"
-                  : user?.role === "user" && "User"}{" "}
-                Dashboard
-              </span>
+            <Title level={4} style={{ margin: 0, color: "#001529" }}>
+              {user?.role === "admin" ? (
+                <p className="mt-3">
+                  Hello, Admin {user?.name} <br />
+                  <span className="text-[12px]">
+                    {currentDateTime.format("MMMM Do YYYY, h:mm:ss A")}
+                  </span>
+                </p>
+              ) : (
+                user?.role === "user" && (
+                  <p className="mt-3">
+                    Hello, {user?.name} <br />
+                    <span className="text-[12px]">
+                      {currentDateTime.format("MMMM Do YYYY")}
+                    </span>
+                  </p>
+                )
+              )}
             </Title>
             <div
               style={{

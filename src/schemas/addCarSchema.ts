@@ -7,6 +7,7 @@ export const addCarSchema = z.object({
   }),
   description: z.string({ required_error: "Please provide a description" }),
   color: z.string({ required_error: "Please select a color" }),
+  location: z.string({ required_error: "Please select a location" }),
   type: z.string({ required_error: "Please select a type" }),
   carImage: z.instanceof(File, {
     message: "Please select an image for the car",

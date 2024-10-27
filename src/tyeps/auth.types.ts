@@ -12,3 +12,15 @@ export type TSignUpFormValues = {
   address: string;
   termsAccepted: boolean;
 };
+
+export type TUser = {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  role: "user" | "admin";
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
