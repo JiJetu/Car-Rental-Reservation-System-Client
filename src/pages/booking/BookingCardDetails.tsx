@@ -1,4 +1,7 @@
+import CustomCheckbox from "@/components/form/CustomCheckbox";
+import CustomForm from "@/components/form/CustomForm";
 import { Button } from "@/components/ui/button";
+import { insuranceOptions } from "@/constant/manageCar";
 import { TCar } from "@/tyeps";
 import { Descriptions, Modal, Tag } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
@@ -16,9 +19,10 @@ const BookingCardDetails = ({
   car,
   handleConfirmBooking,
 }: TBookingCardDetailsProps) => {
-  // const filteredAdditionalFeaturesOptions = additionalFeaturesOptions.filter(
-  //   (option) => !car.features.includes(option.value)
-  // );
+  const handleAddAdditionalInsurance: SubmitHandler<FieldValues> = (data) => {
+    console.log(data);
+    handleConfirmBooking(car, data.additionalInsurance);
+  };
 
   return (
     <Modal
@@ -68,7 +72,7 @@ const BookingCardDetails = ({
         </Descriptions.Item>
 
         {/* Ensure Features takes up full width */}
-        <Descriptions.Item label="Features" span={2}>
+        <Descriptions.Item label="Features" className="col-span-1">
           <ul className="list-disc pl-5">
             {car.features.map((feature, index) => (
               <li key={index}>{feature}</li>
@@ -77,45 +81,38 @@ const BookingCardDetails = ({
         </Descriptions.Item>
 
         {/* Ensure Cancellation Policy takes up full width */}
-        <Descriptions.Item label="Insurance Policy" span={1}>
-          Car insurance is added with the car
-        </Descriptions.Item>
-        <Descriptions.Item label="Cancellation Policy" span={3}>
-          Free cancellation within 24 hours.
+        <Descriptions.Item label="Cancellation Policy" className="col-span-2">
+          <span className="text-green-700">
+            Free cancellation within 24 hours. <br /> But after accepting
+            booking you cant cancel it.
+          </span>
         </Descriptions.Item>
       </Descriptions>
 
-      {/* CustomForm for Additional Features */}
+      {/* CustomForm for Additional insurance */}
       <div className="mt-6">
-        {/* <h2 className="text-lg font-bold mb-2 flex items-center">
-          Select Additional Features:{" "}
+        <h2 className="tmd:text-lg font-bold mb-2 flex items-center">
+          Select Additional Insurance:{" "}
           <span className="text-xs font-medium text-gray-600">
-            ( Each features will cost $20 extra )
+            ( Each features will cost $40 extra )
           </span>
-        </h2> */}
-        {/* <CustomForm onSubmit={handleAddAdditionalFeatures} resetFrom={false}>
+        </h2>
+        <CustomForm onSubmit={handleAddAdditionalInsurance} resetFrom={false}>
           <CustomCheckbox
-            name="additionalFeatures"
-            options={filteredAdditionalFeaturesOptions}
+            name="additionalInsurance"
+            options={insuranceOptions}
           />
 
           <Button
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
             type="submit"
             className="w-full bg-red-600 text-white dark:rounded-lg hover:bg-red-700"
           >
             Book Now
           </Button>
-        </CustomForm> */}
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleConfirmBooking(car);
-          }}
-          type="submit"
-          className="w-full bg-red-600 text-white dark:rounded-lg hover:bg-red-700"
-        >
-          Book Now
-        </Button>
+        </CustomForm>
       </div>
     </Modal>
   );

@@ -8,12 +8,16 @@ const isValidMoment = (value: any): boolean => {
 export const bookingFormSchema = z.object({
   nidOrPassport: z
     .string({ required_error: "Please enter your NID or Passport" })
-    .min(4, "NID/Passport is required"),
+    .min(10, "NID/Passport is required"),
   drivingLicense: z
     .string({ required_error: "Please enter your Driving License" })
-    .min(4, "Driving License is required"),
-  pickUpDate: z.string({ required_error: "Please select a pick-up date" }),
+    .min(16, "Driving License is required"),
+  startDate: z.string({ required_error: "Please select a pick-up date" }),
   startTime: z
+    .any()
+    .refine((value) => isValidMoment(value), "Invalid time format. Use HH:mm"),
+  endDate: z.string({ required_error: "Please select a pick-up date" }),
+  endTime: z
     .any()
     .refine((value) => isValidMoment(value), "Invalid time format. Use HH:mm"),
   additionalFeatures: z.array(z.string()).optional(),

@@ -20,6 +20,7 @@ const carApi = baseApi.injectEndpoints({
           params,
         };
       },
+      providesTags: ["bookings"],
       transformResponse: (response: TResponseRedux<TBooking>) => {
         return {
           data: response.data,
@@ -27,12 +28,6 @@ const carApi = baseApi.injectEndpoints({
         };
       },
     }),
-    // getSingleCar: builder.query({
-    //   query: (id) => {
-    //     console.log(id);
-    //     return { url: `/cars/${id}`, method: "GET" };
-    //   },
-    // }),
     getUserBooking: builder.query({
       query: () => ({
         url: "/bookings/my-bookings",
@@ -48,19 +43,21 @@ const carApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["bookings"],
     }),
-    // updateCar: builder.mutation({
-    //   query: (data) => ({
-    //     url: `/cars/${data?.id}`,
-    //     method: "PUT",
-    //     body: data?.data,
-    //   }),
-    // }),
-    // deleteCar: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/cars/${id}`,
-    //     method: `DELETE`,
-    //   }),
-    // }),
+    approveBooking: builder.mutation({
+      query: (data) => ({
+        url: `/bookings/approve/${data?.bookingId}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["bookings"],
+    }),
+    cancelBooking: builder.mutation({
+      query: (id) => ({
+        url: `/bookings/cancel/${id}`,
+        method: `DELETE`,
+      }),
+      invalidatesTags: ["bookings"],
+    }),
   }),
 });
 
@@ -68,4 +65,6 @@ export const {
   useGetBookingsQuery,
   useAddBookingMutation,
   useGetUserBookingQuery,
+  useApproveBookingMutation,
+  useCancelBookingMutation,
 } = carApi;

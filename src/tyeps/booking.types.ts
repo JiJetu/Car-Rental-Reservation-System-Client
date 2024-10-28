@@ -4,7 +4,7 @@ import { TCar } from "./car.types";
 export type TBooking = {
   car: TCar;
   createdAt: string;
-  date: string;
+  startDate: string;
   endTime: string | null;
   startTime: string;
   endDate: string;
@@ -13,4 +13,8 @@ export type TBooking = {
   user: TUser;
   __v: number;
   _id: string;
+  additionalFeatures: string[];
+  additionalInsurance: string[];
+  bookingConfirm?: boolean;
+  canceledByUser?: boolean;
 };

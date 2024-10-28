@@ -8,7 +8,10 @@ import {
   EnvironmentOutlined,
 } from "@ant-design/icons";
 import { Button } from "@/components/ui/button";
-import { additionalFeaturesOptions } from "@/constant/manageCar";
+import {
+  additionalFeaturesOptions,
+  insuranceOptions,
+} from "@/constant/manageCar";
 import CustomForm from "@/components/form/CustomForm";
 import CustomCheckbox from "@/components/form/CustomCheckbox";
 import { FieldValues, SubmitHandler } from "react-hook-form";
@@ -65,6 +68,8 @@ const CarDetails = () => {
         additionalFeatures: data.additionalFeatures || [],
       },
     };
+
+    console.log(data);
 
     // const res = dispatch(setBookingInfo(bookingData));
     // console.log(res);
@@ -139,17 +144,27 @@ const CarDetails = () => {
             ))}
           </ul>
 
-          {/* additional features with Checkbox group */}
-          <h2 className="text-lg font-bold mt-6 mb-2 flex items-center">
-            Select Additional Features:{" "}
-            <span className="text-xs font-medium text-gray-600">
-              ( Each features will cost $20 extra )
-            </span>
-          </h2>
           <CustomForm onSubmit={handleBookNow} resetFrom={false}>
+            {/* additional features with Checkbox group */}
+            <h2 className="text-lg font-bold mt-6 mb-2 flex items-center">
+              Select Additional Features:{" "}
+              <span className="text-xs font-medium text-gray-600">
+                ( Each features will cost $20 extra )
+              </span>
+            </h2>
             <CustomCheckbox
               name="additionalFeatures"
               options={filteredAdditionalFeaturesOptions}
+            />
+            <h2 className="text-lg font-bold mb-2 flex items-center">
+              Select Additional Insurance:{" "}
+              <span className="text-xs font-medium text-gray-600">
+                ( Each insurance will cost $40 extra )
+              </span>
+            </h2>
+            <CustomCheckbox
+              name="additionalInsurance"
+              options={insuranceOptions}
             />
 
             <Button

@@ -14,7 +14,7 @@ const Booking = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [prevParams, setPrevParams] = useState<TQueryParam[]>([]);
   const [selectedCar, setSelectedCar] = useState<TCar | null>(null);
-  const [additionalFeatures, setAdditionalFeatures] = useState<string[]>([]);
+  const [additionalInsurance, setAdditionalInsurance] = useState<string[]>([]);
   const [bookingDetails, setBookingDetails] = useState<any | undefined>(
     undefined
   );
@@ -111,19 +111,19 @@ const Booking = () => {
     }
   };
 
-  const handleConfirmBooking = (car: TCar) => {
-    console.log("Booking confirmed for car:", car);
+  const handleConfirmBooking = (car: TCar, addInsurance: string[]) => {
     setSelectedCar(car);
-    // setAdditionalFeatures(addFeatures);
+    setAdditionalInsurance(addInsurance);
   };
 
   const handleBookingSubmit: SubmitHandler<FieldValues> = (data) => {
-    setAdditionalFeatures(data.additionalFeatures);
-    const time = data.startTime.format("HH:mm");
+    const startTime = data.startTime.format("HH:mm");
+    const endTime = data.endTime.format("HH:mm");
     const bookingInfo = {
       ...data,
       selectedCar,
-      startTime: time,
+      startTime,
+      endTime,
     };
 
     setBookingDetails(bookingInfo as any);
@@ -134,8 +134,12 @@ const Booking = () => {
 
     const bookingInfo = {
       carId: selectedCar?._id,
-      date: bookingDetails?.pickUpDate,
+      startDate: bookingDetails?.startDate,
       startTime: bookingDetails?.startTime,
+      additionalFeatures: bookingDetails?.additionalFeatures,
+      nidOrPassport: bookingDetails?.nidOrPassport,
+      drivingLicense: bookingDetails?.drivingLicense,
+      additionalInsurance,
     };
 
     try {
@@ -179,14 +183,14 @@ const Booking = () => {
       {selectedCar && !bookingDetails && (
         <BookingForm
           selectedCar={selectedCar}
-          additionalFeatures={additionalFeatures}
+          additionalInsurance={additionalInsurance}
           onBookingSubmit={handleBookingSubmit}
         />
       )}
 
       {bookingDetails && (
         <BookingConfirm
-          additionalFeatures={additionalFeatures}
+          additionalInsurance={additionalInsurance}
           handleFinalizeBooking={handleFinalizeBooking}
           bookingDetails={bookingDetails}
         />

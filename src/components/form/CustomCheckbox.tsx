@@ -23,7 +23,11 @@ const CustomCheckbox = ({ name, label, options }: TCustomCheckboxProps) => {
             )
           }
         >
-          <Checkbox.Group {...field} options={options} />
+          <Checkbox.Group
+            {...field}
+            options={options}
+            className="dark:bg-white dark:text-black dark:p-3"
+          />
           {error && <p style={{ color: "red" }}>{error.message}</p>}
         </Form.Item>
       )}

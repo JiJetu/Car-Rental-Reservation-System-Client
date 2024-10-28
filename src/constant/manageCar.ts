@@ -18,7 +18,6 @@ export const carTypeOptions = [
 ];
 
 export const additionalFeaturesOptions = [
-  { value: "Insurance", label: "Insurance" },
   { value: "Child_Seat", label: "Child Seat" },
   ...carFeaturesOptions,
 ];

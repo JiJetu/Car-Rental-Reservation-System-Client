@@ -13,7 +13,6 @@ type TBookingCardProps = {
 
 const BookingCard = ({ car, handleConfirmBooking }: TBookingCardProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  // const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
   const handleOpenModal = () => {
     setIsModalVisible(true);
@@ -22,17 +21,6 @@ const BookingCard = ({ car, handleConfirmBooking }: TBookingCardProps) => {
   const handleCloseModal = () => {
     setIsModalVisible(false);
   };
-
-  // todo: if use insurance option
-
-  // const handleAddAdditionalFeatures: SubmitHandler<FieldValues> = (data) => {
-  //   const additionalFeatures = data.additionalFeatures || [];
-  //   setSelectedFeatures(additionalFeatures);
-  //   console.log(additionalFeatures);
-
-  //   // Confirm booking with car and additional features
-  //   handleConfirmBooking(car, additionalFeatures);
-  // };
 
   return (
     <div className="p-4 flex flex-col h-full">

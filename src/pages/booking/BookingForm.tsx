@@ -15,16 +15,16 @@ import { FaBolt, FaDroplet } from "react-icons/fa6";
 
 type TBookingFormProps = {
   selectedCar: TCar;
-  additionalFeatures: string[];
+  additionalInsurance: string[];
   onBookingSubmit: SubmitHandler<FieldValues>;
 };
 
 const BookingForm = ({
   selectedCar,
   onBookingSubmit,
-  additionalFeatures,
+  additionalInsurance,
 }: TBookingFormProps) => {
-  const { minEndDate } = useTodayAndMinEndDate(1);
+  const { today, minEndDate } = useTodayAndMinEndDate(1);
 
   const filteredAdditionalFeaturesOptions = additionalFeaturesOptions.filter(
     (option) => !selectedCar.features.includes(option.value)
@@ -53,18 +53,34 @@ const BookingForm = ({
               label="Driving License"
             />
             <Row gutter={16}>
-              <Col span={24} md={{ span: 12 }}>
-                <CustomDate
-                  label="Pick-Up Date"
-                  minDate={minEndDate}
-                  name="pickUpDate"
-                />
-              </Col>
-              <Col span={24} md={{ span: 12 }} lg={{ span: 6 }}>
+              <Col span={24} md={{ span: 4 }}>
                 <CustomTime
                   name="startTime"
                   label="Pick-Up Time"
-                  placeholderText="Select Pick-Up Time"
+                  placeholderText="Time"
+                  rules={{ required: "Pick-up time is required" }}
+                />
+              </Col>
+              <Col span={24} md={{ span: 8 }}>
+                <CustomDate
+                  label="Pick-Up Date"
+                  minDate={today}
+                  name="startDate"
+                />
+              </Col>
+
+              <Col span={24} md={{ span: 8 }}>
+                <CustomDate
+                  label="Pick-Off Date"
+                  minDate={minEndDate}
+                  name="endDate"
+                />
+              </Col>
+              <Col span={24} md={{ span: 4 }}>
+                <CustomTime
+                  name="endTime"
+                  label="Pick-Up Time"
+                  placeholderText="Time"
                   rules={{ required: "Pick-up time is required" }}
                 />
               </Col>
@@ -121,9 +137,9 @@ const BookingForm = ({
           </p>
 
           <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center">
-            <span>Tax: 10% </span>
+            <span>Tax: </span>
             <span className="flex-1 mx-2 h-px bg-gray-400 dark:bg-gray-600"></span>
-            <span>${(selectedCar.pricePerHour * 0.1).toFixed(2)}</span>
+            <strong>10% on total</strong>
           </p>
 
           {/* Electric Vehicle Status */}
@@ -154,18 +170,18 @@ const BookingForm = ({
             </ul>
           </div>
 
-          {/* Additional Features */}
-          {additionalFeatures?.length > 0 && (
+          {/* Additional insurance */}
+          {additionalInsurance?.length > 0 && (
             <div className="mt-4">
               <h3 className="font-semibold flex items-center">
                 <span>
-                  Additional Features: ({additionalFeatures?.length} * $20)
+                  Additional Insurance: ({additionalInsurance?.length} * $40)
                 </span>
                 <span className="flex-1 mx-2 h-px bg-gray-400 dark:bg-gray-600"></span>
-                <span>{additionalFeatures?.length * 20} </span>
+                <span>{additionalInsurance?.length * 40} </span>
               </h3>
               <ul className="list-disc pl-5 text-sm text-gray-800 dark:text-gray-400">
-                {additionalFeatures?.map((feature, index) => (
+                {additionalInsurance?.map((feature, index) => (
                   <li key={index}>{feature}</li>
                 ))}
               </ul>

@@ -300,13 +300,14 @@ const AllCars = () => {
   };
 
   return (
-    <>
+    <div className="overflow-x-auto w-full">
       <Table
         loading={isFetching}
         columns={columns}
         dataSource={tableData}
         onChange={onChange}
         pagination={false}
+        scroll={{ x: 800 }}
       />
       <Pagination
         className="dark:bg-white"
@@ -326,7 +327,7 @@ const AllCars = () => {
           }}
         />
       )}
-    </>
+    </div>
   );
 };
 
