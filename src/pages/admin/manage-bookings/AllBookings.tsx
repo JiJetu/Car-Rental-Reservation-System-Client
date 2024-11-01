@@ -1,21 +1,43 @@
 import { useState } from "react";
-import { Button, Table, DatePicker, Typography } from "antd";
+import { Button, Table, DatePicker, Typography, Col } from "antd";
 import { MdCancel } from "react-icons/md";
 import { FcApproval } from "react-icons/fc";
 import Loading from "@/components/share/Loading";
 import {
   useApproveBookingMutation,
+  useCancelBookingMutation,
   useGetBookingsQuery,
 } from "@/redux/features/user/booking.api";
 import { TBooking, TResponse } from "@/tyeps";
 import { toast } from "sonner";
 import { ColumnsType } from "antd/es/table";
+import Swal from "sweetalert2";
 
 const { Text } = Typography;
 
 const AllBookings = () => {
   const [searchDate, setSearchDate] = useState<string | null>(null);
   const [approveBooking] = useApproveBookingMutation();
+  const [cancelBooking] = useCancelBookingMutation();
+
+  // const {
+  //   data: userBooking,
+  //   isFetching,
+  //   isError,
+  // } = useGetBookingsQuery(
+  //   searchDate
+  //     ? [
+  //         { name: "date", value: searchDate },
+  //         { name: "bookingConfirm", value: false },
+  //         { name: "canceledBooking", value: false },
+  //       ]
+  //     : [
+  //         { name: "bookingConfirm", value: false },
+  //         { name: "canceledBooking", value: false },
+  //         { name: "bookingConfirm", value: true },
+  //         { name: "canceledBooking", value: true },
+  //       ]
+  // );
 
   const {
     data: userBooking,
@@ -26,6 +48,15 @@ const AllBookings = () => {
   );
 
   const bookings = userBooking?.data as TBooking[] | undefined;
+
+  // Sort bookings to display unapproved and uncanceled bookings first
+  const sortedBookings = bookings
+    ? [...bookings].sort((a, b) => {
+        if (!a.canceledBooking && !a.bookingConfirm) return -1;
+        if (!b.canceledBooking && !b.bookingConfirm) return 1;
+        return 0;
+      })
+    : [];
 
   const handleApproveBooking = async (bookingId: string) => {
     const toastId = toast.loading("Booking approving....");
@@ -51,40 +82,37 @@ const AllBookings = () => {
     }
   };
   const handleCancelBooking = async (bookingId: string) => {
-    console.log(bookingId);
-    // Swal.fire({
-    //   title: "Are you sure?",
-    //   text: "You won't be able to revert this!",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#3085d6",
-    //   cancelButtonColor: "#d33",
-    //   confirmButtonText: "Yes, cancel booking!",
-    // }).then(async (result) => {
-    //   if (result.isConfirmed) {
-    //     const toastId = toast.loading("Canceling booking....");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel booking!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Canceling booking....");
 
-    //     try {
-    //       const res = (await cancelBooking(bookingId)) as TResponse<TBooking>;
+        try {
+          const res = (await cancelBooking(bookingId)) as TResponse<TBooking>;
 
-    //       console.log(res);
+          if (res?.error) {
+            return toast.error(res?.error?.data?.message, {
+              id: toastId,
+              duration: 2000,
+            });
+          }
 
-    //       if (res?.error) {
-    //         toast.error(res?.error?.data?.message, {
-    //           id: toastId,
-    //           duration: 2000,
-    //         });
-    //       }
-
-    //       toast.success("Booking cancel successfully!", {
-    //         id: toastId,
-    //         duration: 2000,
-    //       });
-    //     } catch (error) {
-    //       toast.error("something went wrong", { id: toastId, duration: 2000 });
-    //     }
-    //   }
-    // });
+          toast.success("Booking cancel successfully!", {
+            id: toastId,
+            duration: 2000,
+          });
+        } catch (error) {
+          toast.error("something went wrong", { id: toastId, duration: 2000 });
+        }
+      }
+    });
   };
 
   const columns: ColumnsType<TBooking> = [
@@ -99,7 +127,7 @@ const AllBookings = () => {
       dataIndex: "car",
       key: "car",
       render: (_: any, record: TBooking) => (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-start gap-3">
           <img
             className="w-12 h-12 object-cover rounded"
             src={record.car?.carImage}
@@ -111,6 +139,18 @@ const AllBookings = () => {
             <Text type="secondary">{record.car?.location}</Text>
           </div>
         </div>
+      ),
+    },
+    {
+      title: "User Info.",
+      dataIndex: "userInfo",
+      key: "userInfo",
+      render: (_: any, record: TBooking) => (
+        <>
+          <Text>{record.user.name}</Text>
+          <br />
+          <Text type="secondary">{record.user.address}</Text>
+        </>
       ),
     },
     {
@@ -155,7 +195,7 @@ const AllBookings = () => {
       title: "Options",
       key: "options",
       render: (_: any, record: TBooking) => {
-        return record.canceledByUser ? (
+        return record.canceledBooking ? (
           <p className="text-red-500 font-semibold">Canceled</p>
         ) : record.bookingConfirm ? (
           <p className="text-green-600 font-semibold">Approved</p>
@@ -187,13 +227,19 @@ const AllBookings = () => {
   return (
     <div className="container mx-auto p-6 min-h-screen">
       <div className="mb-4 flex justify-between items-center">
-        <Text className="text-xl font-bold">Bookings Confirm</Text>
-        <DatePicker
-          onChange={(date) =>
-            setSearchDate(date ? date.format("YYYY-MM-DD") : null)
-          }
-          placeholder="Search by date"
-        />
+        <Text className="text-xl font-bold dark:text-white">
+          Bookings Confirm
+        </Text>
+
+        <Col md={{ span: 8 }}>
+          <DatePicker
+            onChange={(date) =>
+              setSearchDate(date ? date.format("YYYY-MM-DD") : null)
+            }
+            placeholder="Search by Pick-Up Date"
+            style={{ width: "100%" }}
+          />
+        </Col>
       </div>
       {isFetching ? (
         <Loading />
@@ -204,10 +250,10 @@ const AllBookings = () => {
       ) : (
         <div className="overflow-x-auto w-full">
           <Table
-            columns={columns.map((col) => ({ ...col, width: 150 }))}
-            dataSource={bookings}
+            columns={columns.map((col) => ({ ...col, maxWidth: 150 }))}
+            dataSource={sortedBookings}
             rowKey={(record) => record._id}
-            pagination={{ pageSize: 10 }}
+            pagination={{ pageSize: 4 }}
             scroll={{ x: 800 }}
           />
         </div>

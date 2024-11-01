@@ -8,6 +8,8 @@ import UserAdminLayout from "@/components/layout/UserAdminLayout";
 import { adminPaths } from "./admin.routes";
 import { userPaths } from "./user.routes";
 import NotFoundPage from "@/pages/not-found-page/NotFoundPage";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import { userRole } from "@/constant/role";
 
 const router = createBrowserRouter([
   {
@@ -18,12 +20,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <UserAdminLayout />,
+    element: (
+      <ProtectedRoute role={userRole.ADMIN}>
+        <UserAdminLayout />
+      </ProtectedRoute>
+    ),
     children: routesGenerator(adminPaths),
   },
   {
     path: "/user",
-    element: <UserAdminLayout />,
+    element: (
+      <ProtectedRoute role={userRole.USER}>
+        <UserAdminLayout />
+      </ProtectedRoute>
+    ),
     children: routesGenerator(userPaths),
   },
   {

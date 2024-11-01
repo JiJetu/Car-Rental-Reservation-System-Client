@@ -33,7 +33,7 @@ const carApi = baseApi.injectEndpoints({
         url: "/bookings/my-bookings",
         method: "GET",
       }),
-      providesTags: ["bookings"],
+      providesTags: ["bookings", "cars"],
     }),
     addBooking: builder.mutation({
       query: (data) => ({
@@ -41,13 +41,20 @@ const carApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["bookings"],
+      invalidatesTags: ["bookings", "cars"],
     }),
     approveBooking: builder.mutation({
       query: (data) => ({
         url: `/bookings/approve/${data?.bookingId}`,
         method: "PUT",
         body: data,
+      }),
+      invalidatesTags: ["bookings", "cars"],
+    }),
+    bookingPayment: builder.mutation({
+      query: (id) => ({
+        url: `/bookings/payment/${id}`,
+        method: `PUT`,
       }),
       invalidatesTags: ["bookings"],
     }),
@@ -56,7 +63,7 @@ const carApi = baseApi.injectEndpoints({
         url: `/bookings/cancel/${id}`,
         method: `DELETE`,
       }),
-      invalidatesTags: ["bookings"],
+      invalidatesTags: ["bookings", "cars"],
     }),
   }),
 });
@@ -67,4 +74,5 @@ export const {
   useGetUserBookingQuery,
   useApproveBookingMutation,
   useCancelBookingMutation,
+  useBookingPaymentMutation,
 } = carApi;

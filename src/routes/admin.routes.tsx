@@ -7,7 +7,6 @@ import AllUsers from "../pages/admin/manage-user/AllUsers";
 import { DashboardIcon } from "@radix-ui/react-icons";
 import { CarFilled, CarTwoTone } from "@ant-design/icons";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { MdOutlineCollectionsBookmark } from "react-icons/md";
 import { FaRegAddressBook, FaUsers } from "react-icons/fa6";
 import { TbTruckReturn } from "react-icons/tb";
 import { TbView360Arrow } from "react-icons/tb";
@@ -48,23 +47,18 @@ export const adminPaths = [
       {
         name: "View Bookings",
         path: "view-bookings",
-        icon: <MdOutlineCollectionsBookmark size={20} color="#14b3ab" />,
+        icon: <TbTruckReturn size={20} color="#14b3ab" />,
         element: <AllBookings />,
       },
-    ],
-  },
-  {
-    name: "Manage Returns",
-    icon: <TbView360Arrow size={20} />,
-    children: [
       {
         name: "View Return Cars",
         path: "view-return-Cars",
-        icon: <TbTruckReturn size={20} color="#14b3ab" />,
+        icon: <TbView360Arrow size={20} color="#14b3ab" />,
         element: <AllReturnCars />,
       },
     ],
   },
+
   {
     name: "User Management",
     icon: <FaUsers size={20} />,

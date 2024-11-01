@@ -21,8 +21,3 @@ export type TCar = {
   updatedAt: string;
   __v: number;
 };
-
-// export type TReturnCar = {
-//   bookingId: Types.ObjectId;
-//   endTime: string;
-// };

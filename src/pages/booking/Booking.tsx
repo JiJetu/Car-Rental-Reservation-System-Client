@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import SearchForm from "./SearchForm";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useGetAllCarsQuery } from "@/redux/features/admin/carApi";
-import { TCar, TQueryParam, TResponse } from "@/tyeps";
+import { CarStatus, TCar, TQueryParam, TResponse } from "@/tyeps";
 import BookingForm from "./BookingForm";
 import BookingConfirm from "./BookingConfirm";
 import SearchResult from "./SearchResult";
@@ -33,6 +33,7 @@ const Booking = () => {
     { name: "limit", value: 10 },
     { name: "page", value: page },
     { name: "isDeleted", value: false },
+    { name: "status", value: CarStatus.available },
     ...params,
   ]);
 

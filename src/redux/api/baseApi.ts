@@ -29,9 +29,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   BaseQueryApi,
   DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
-  let result = await baseQuery(args, api, extraOptions);
+  let result = (await baseQuery(args, api, extraOptions)) as any;
 
   if (result.error?.status === 404) {
+    toast.error(result?.error?.data?.message, { duration: 2000 });
+  }
+
+  if (result?.error?.status === 403) {
     toast.error(result?.error?.data?.message, { duration: 2000 });
   }
 
@@ -60,6 +64,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["bookings", "cars", "user"],
+  tagTypes: ["bookings", "cars", "user", "review"],
   endpoints: () => ({}),
 });

@@ -257,7 +257,7 @@ const AllCars = () => {
           <div className="flex gap-2">
             <Button
               onClick={() => handleEditCar(car)}
-              style={{ color: "blue" }}
+              style={{ color: "green" }}
             >
               <EditFilled />
             </Button>
@@ -309,13 +309,15 @@ const AllCars = () => {
         pagination={false}
         scroll={{ x: 800 }}
       />
-      <Pagination
-        className="dark:bg-white"
-        current={page}
-        onChange={(value) => setPage(value)}
-        pageSize={metaData?.limit}
-        total={metaData?.total}
-      />
+      <div className="flex justify-center mt-4">
+        <Pagination
+          className="dark:bg-white"
+          current={page}
+          onChange={(value) => setPage(value)}
+          pageSize={metaData?.limit}
+          total={metaData?.total}
+        />
+      </div>
 
       {selectedCar && (
         <UpdateCar

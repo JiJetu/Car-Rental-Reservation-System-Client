@@ -30,7 +30,7 @@ const defaultValues = {
   type: "Hybrid",
   isElectric: true,
   features: ["AC", "Bluetooth", "Long Range Battery"],
-  pricePerHour: 500,
+  pricePerHour: 50,
 };
 
 const AddCar = () => {

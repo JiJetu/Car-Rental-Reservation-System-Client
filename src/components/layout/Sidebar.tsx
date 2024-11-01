@@ -3,7 +3,7 @@ import { Layout, Menu } from "antd";
 import { NavLink } from "react-router-dom";
 import { dashboardItemsGenerator } from "@/utils/dashboardItemsGenerator";
 import { userRole } from "@/constant/role";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { TUser, useCurrentToken } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import logo from "../../assets/images/preview (1).png";
 import { adminPaths } from "@/routes/admin.routes";
@@ -11,6 +11,7 @@ import { userPaths } from "@/routes/user.routes";
 import { navItemsGenerator } from "@/utils/navItemsGenerator";
 import { mainPath } from "@/routes/navbar.routes";
 import { modeItem } from "@/constant/mode";
+import { verifyToken } from "@/utils/verifyToken";
 
 const { Sider } = Layout;
 
@@ -20,10 +21,16 @@ type TSidebarProps = {
 
 const Sidebar = ({ mode }: TSidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
-  const user = useAppSelector(selectCurrentUser);
+  const token = useAppSelector(useCurrentToken);
+
+  let user: any;
+  if (token) {
+    user = verifyToken(token);
+  }
+
   let sidebarItems;
 
-  switch (user?.role) {
+  switch ((user as TUser)!.role) {
     case userRole.ADMIN:
       sidebarItems = dashboardItemsGenerator(adminPaths, userRole.ADMIN);
       break;

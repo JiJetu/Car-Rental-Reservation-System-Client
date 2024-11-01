@@ -1,6 +1,6 @@
-import { Alert, Skeleton, Tag } from "antd";
+import { Alert, Card, Skeleton, Tag } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import { CarStatus, TCar } from "@/tyeps";
+import { CarStatus, TCar, TReview } from "@/tyeps";
 import ReactImageMagnifier from "simple-image-magnifier/react";
 import {
   CheckOutlined,
@@ -18,14 +18,31 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useAppDispatch } from "@/redux/hooks";
 import { useGetSingleCarQuery } from "@/redux/features/admin/carApi";
 import { FaBolt } from "react-icons/fa6";
+import { useGetSpecificReviewsQuery } from "@/redux/features/review/review.api";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { CardContent } from "@/components/ui/card";
+import moment from "moment";
 
 const CarDetails = () => {
   const { id } = useParams();
   const { data: carData, isFetching, isError } = useGetSingleCarQuery(id);
+  const {
+    data: reviewData,
+    isFetching: reviewFetching,
+    isError: reviewError,
+  } = useGetSpecificReviewsQuery(id);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  if (isFetching) {
+  const reviews = reviewData?.data as TReview[];
+
+  if (isFetching || reviewFetching) {
     return (
       <div className="container mx-auto p-4">
         <Skeleton active paragraph={{ rows: 8 }} />
@@ -183,11 +200,62 @@ const CarDetails = () => {
         <p className="text-gray-600 dark:text-gray-400">{description}</p>
       </div>
 
-      {/* customer reviews */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
-        <p className="text-gray-500">No reviews available yet.</p>
-      </div>
+      {reviewError || reviews.length === 0 ? (
+        <div className="space-y-6">
+          <p className="text-gray-500">No reviews available yet.</p>
+        </div>
+      ) : (
+        <>
+          <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
+          <div className="max-w-[85%] md:max-w-full mx-auto">
+            <Carousel className="mx-5 md:mx-14">
+              <CarouselContent>
+                {/* displaying reviews with carousel */}
+                {reviews?.map((review) => (
+                  <CarouselItem
+                    key={review?._id}
+                    className="flex justify-center"
+                  >
+                    <div className="p-4 w-full max-w-2xl min-h-[450px] md:min-h-[400px]">
+                      <Card className="h-full shadow-lg">
+                        <CardContent className="dark:bg-[#1a1919] flex flex-col-reverse md:flex-row items-center justify-between h-full p-6">
+                          <div className="md:w-2/3 mb-6 md:mb-0 md:mr-6 space-y-4">
+                            <h3 className="text-base text-gray-500 dark:text-white">
+                              Customer Review
+                            </h3>
+                            <p className="md:text-xl dark:text-white font-semibold">
+                              {review?.userReview}
+                            </p>
+                            <p className="text-base space-x-2 text-gray-500 dark:text-white flex items-center">
+                              <span className="text-3xl">-</span>
+                              <span>{review?.user?.name}</span>
+                              <span>
+                                |{" "}
+                                {moment(review?.createdAt).format(
+                                  "MMMM D, YYYY"
+                                )}
+                              </span>
+                            </p>
+                          </div>
+                          <div className="md:w-1/3 flex justify-center">
+                            <img
+                              className="rounded-lg w-40 h-40 object-cover"
+                              src={review?.user?.userImage}
+                              alt={review?.user?.name}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        </>
+      )}
     </div>
   );
 };

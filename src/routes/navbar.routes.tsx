@@ -5,6 +5,7 @@ import Contact from "../pages/contact/Contact";
 import CarDetails from "@/pages/carDetails/CarDetails";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
 import CarListing from "@/pages/car listing/CarListing";
+import { userRole } from "@/constant/role";
 
 export const mainPath = [
   {
@@ -26,7 +27,7 @@ export const mainPath = [
     name: "Booking",
     path: "booking",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute role={userRole.USER || userRole.ADMIN}>
         <Booking />
       </ProtectedRoute>
     ),
@@ -39,7 +40,7 @@ export const mainPath = [
   {
     path: "car/:id",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute role={userRole.USER || userRole.ADMIN}>
         <CarDetails />
       </ProtectedRoute>
     ),

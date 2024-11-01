@@ -16,11 +16,13 @@ export type TSignUpFormValues = {
 export type TUser = {
   _id: string;
   name: string;
+  userImage: string;
   email: string;
   phone: string;
   address: string;
   role: "user" | "admin";
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  createdAt?: string;
+  isBlocked: boolean;
+  updatedAt?: string;
+  __v?: number;
 };
