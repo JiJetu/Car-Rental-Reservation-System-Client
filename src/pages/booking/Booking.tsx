@@ -9,11 +9,14 @@ import SearchResult from "./SearchResult";
 import { toast } from "sonner";
 import { useAddBookingMutation } from "@/redux/features/user/booking.api";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "@/redux/hooks";
+import { selectedBooking } from "@/redux/features/user/booking.slice";
 
 const Booking = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [prevParams, setPrevParams] = useState<TQueryParam[]>([]);
   const [selectedCar, setSelectedCar] = useState<TCar | null>(null);
+  const [searchCar, setSearchCar] = useState<boolean>(false);
   const [additionalInsurance, setAdditionalInsurance] = useState<string[]>([]);
   const [bookingDetails, setBookingDetails] = useState<any | undefined>(
     undefined
@@ -24,6 +27,7 @@ const Booking = () => {
   const [isSearchFetching, setIsSearchFetching] = useState(false);
   const [addBooking] = useAddBookingMutation();
   const navigate = useNavigate();
+  const wishListCarInfo = useAppSelector(selectedBooking);
 
   const {
     data: carsData,
@@ -36,6 +40,53 @@ const Booking = () => {
     { name: "status", value: CarStatus.available },
     ...params,
   ]);
+
+  // Update params based on wishListCarInfo
+  useEffect(() => {
+    const queryParams: TQueryParam[] = [];
+
+    if (wishListCarInfo?.wishCar) {
+      if (wishListCarInfo.wishCar.color) {
+        queryParams.push({
+          name: "color",
+          value: wishListCarInfo.wishCar.color,
+        });
+      }
+      if (wishListCarInfo.wishCar.name) {
+        queryParams.push({
+          name: "searchTerm",
+          value: wishListCarInfo.wishCar.name,
+        });
+      }
+      if (wishListCarInfo.wishCar.pricePerHour) {
+        queryParams.push({
+          name: "pricePerHour",
+          value: wishListCarInfo.wishCar.pricePerHour,
+        });
+      }
+      if (wishListCarInfo.wishCar.location) {
+        queryParams.push({
+          name: "location",
+          value: wishListCarInfo.wishCar.location,
+        });
+      }
+      if (wishListCarInfo.wishCar.type) {
+        queryParams.push({ name: "type", value: wishListCarInfo.wishCar.type });
+      }
+      if (wishListCarInfo.wishCar.features.length > 0) {
+        wishListCarInfo.wishCar.features.forEach((feature: string) => {
+          queryParams.push({ name: "features", value: feature });
+        });
+      }
+      setSearchCar(true);
+    } else {
+      setSearchCar(false);
+    }
+
+    console.log("Updated Query Params from Wish List:", queryParams);
+
+    setParams(queryParams);
+  }, [wishListCarInfo]);
 
   useEffect(() => {
     if (!isFetching && carsData && carsData.data) {
@@ -69,6 +120,7 @@ const Booking = () => {
   };
 
   const handleSearch: SubmitHandler<FieldValues> = (data) => {
+    setSearchCar(true);
     console.log(data);
 
     const queryParams: TQueryParam[] = [];
@@ -76,6 +128,14 @@ const Booking = () => {
     // Apply search filters based on user input
     if (data.carType) {
       queryParams.push({ name: "type", value: data.carType });
+    }
+
+    if (data.search) {
+      queryParams.push({ name: "searchTerm", value: data.search });
+    }
+
+    if (data.location) {
+      queryParams.push({ name: "location", value: data.location });
     }
 
     if (data.carColor) {
@@ -152,6 +212,7 @@ const Booking = () => {
         toast.error(res?.error?.data?.message, { id: toastId, duration: 2000 });
       }
 
+      // todo: dispatch clean wish list
       toast.success(
         "Your request have received, But please wait for confirm your request",
         { id: toastId, duration: 5000 }
@@ -168,17 +229,20 @@ const Booking = () => {
       {!selectedCar && !bookingDetails && (
         <>
           <SearchForm onSearch={handleSearch} loading={isFetching} />
-          <div className="container mx-auto p-6">
-            <SearchResult
-              handleConfirmBooking={handleConfirmBooking}
-              allCars={allCars}
-              isFetching={isFetching}
-              hasMore={hasMore}
-              isSearchFetching={isSearchFetching}
-              loadMoreCars={loadMoreCars}
-            />
-          </div>
         </>
+      )}
+
+      {!selectedCar && searchCar && !bookingDetails && (
+        <div className="container mx-auto p-6">
+          <SearchResult
+            handleConfirmBooking={handleConfirmBooking}
+            allCars={allCars}
+            isFetching={isFetching}
+            hasMore={hasMore}
+            isSearchFetching={isSearchFetching}
+            loadMoreCars={loadMoreCars}
+          />
+        </div>
       )}
 
       {selectedCar && !bookingDetails && (

@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/carousel";
 import { CardContent } from "@/components/ui/card";
 import moment from "moment";
+import { addToWishList } from "@/redux/features/user/booking.slice";
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -79,17 +80,16 @@ const CarDetails = () => {
     (option) => !features.includes(option.value)
   );
 
-  const handleBookNow: SubmitHandler<FieldValues> = (data) => {
-    const bookingData = {
-      bookingInfo: {
-        additionalFeatures: data.additionalFeatures || [],
-      },
-    };
-
+  const handleBookNow: SubmitHandler<FieldValues> = async (data) => {
     console.log(data);
 
-    // const res = dispatch(setBookingInfo(bookingData));
-    // console.log(res);
+    const wishListCarInfo = {
+      car: carData?.data,
+      ...data,
+    };
+
+    await dispatch(addToWishList({ wishListCarInfo }));
+
     navigate(`/booking`);
   };
 
