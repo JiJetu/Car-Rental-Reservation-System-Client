@@ -5,7 +5,7 @@ const { Text } = Typography;
 const UserProfile = ({ userData }: any) => (
   <div className="flex items-center gap-4">
     <img
-      className="w-24 h-30 rounded-full object-cover"
+      className="w-24 h-30 rounded-lg object-cover"
       src={userData?.userImage}
       alt={userData?.name}
     />

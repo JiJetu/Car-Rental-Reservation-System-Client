@@ -77,15 +77,10 @@ const AdminDashboard = () => {
   const loading = carsLoading || usersLoading || userInfoUpdating || isFetching;
   const hasError = carsError || usersError || isFetchingError;
 
-  console.log(allUsers?.data);
-  console.log(carsData?.data);
-
   // admin personal info
   const userData: TUser = userInfo?.data;
 
   const bookings = userBookingData?.data as TBooking[] | undefined;
-
-  console.log(bookings);
 
   // Calculate booking metrics
   const totalBookings = bookings?.length || 0;
@@ -149,7 +144,6 @@ const AdminDashboard = () => {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
     const toastId = toast.loading("Updating user information...");
     try {
       let imageUrl = userData.userImage as string | null;

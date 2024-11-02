@@ -111,6 +111,18 @@ const AllReturnCars = () => {
       ),
     },
     {
+      title: "Expected Return",
+      dataIndex: "expectedReturn",
+      key: "expectedReturn",
+      render: (_: any, record: TBooking) => (
+        <>
+          <Text>{record.expectedEndDate}</Text>
+          <br />
+          <Text type="secondary">{record.expectedEndTime}</Text>
+        </>
+      ),
+    },
+    {
       title: "Return Date",
       dataIndex: "returnDate",
       key: "returnDate",

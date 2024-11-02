@@ -9,8 +9,11 @@ import SearchResult from "./SearchResult";
 import { toast } from "sonner";
 import { useAddBookingMutation } from "@/redux/features/user/booking.api";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "@/redux/hooks";
-import { selectedBooking } from "@/redux/features/user/booking.slice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  clearWishList,
+  selectedBooking,
+} from "@/redux/features/user/booking.slice";
 
 const Booking = () => {
   const [params, setParams] = useState<TQueryParam[]>([]);
@@ -28,6 +31,7 @@ const Booking = () => {
   const [addBooking] = useAddBookingMutation();
   const navigate = useNavigate();
   const wishListCarInfo = useAppSelector(selectedBooking);
+  const dispatch = useAppDispatch();
 
   const {
     data: carsData,
@@ -73,20 +77,23 @@ const Booking = () => {
       if (wishListCarInfo.wishCar.type) {
         queryParams.push({ name: "type", value: wishListCarInfo.wishCar.type });
       }
-      if (wishListCarInfo.wishCar.features.length > 0) {
-        wishListCarInfo.wishCar.features.forEach((feature: string) => {
+      if (
+        wishListCarInfo?.wishCar?.features?.length &&
+        wishListCarInfo?.wishCar?.features?.length > 0
+      ) {
+        wishListCarInfo?.wishCar?.features?.forEach((feature: string) => {
           queryParams.push({ name: "features", value: feature });
         });
       }
+
       setSearchCar(true);
     } else {
       setSearchCar(false);
     }
-
-    console.log("Updated Query Params from Wish List:", queryParams);
-
     setParams(queryParams);
-  }, [wishListCarInfo]);
+
+    dispatch(clearWishList());
+  }, []);
 
   useEffect(() => {
     if (!isFetching && carsData && carsData.data) {
@@ -193,10 +200,14 @@ const Booking = () => {
   const handleFinalizeBooking = async () => {
     const toastId = toast.loading("Creating....");
 
+    console.log(bookingDetails);
+
     const bookingInfo = {
       carId: selectedCar?._id,
       startDate: bookingDetails?.startDate,
       startTime: bookingDetails?.startTime,
+      expectedEndDate: bookingDetails?.endDate,
+      expectedEndTime: bookingDetails?.endTime,
       additionalFeatures: bookingDetails?.additionalFeatures,
       nidOrPassport: bookingDetails?.nidOrPassport,
       drivingLicense: bookingDetails?.drivingLicense,
@@ -209,7 +220,10 @@ const Booking = () => {
       console.log(res);
 
       if (res?.error) {
-        toast.error(res?.error?.data?.message, { id: toastId, duration: 2000 });
+        return toast.error(res?.error?.data?.message, {
+          id: toastId,
+          duration: 2000,
+        });
       }
 
       // todo: dispatch clean wish list

@@ -55,6 +55,7 @@ const AddCar = () => {
         description: data.description,
         shortDescription: data.shortDescription,
         color: data.color,
+        rating: data.rating,
         location: data.location,
         type: data.type,
         status: CarStatus.available,

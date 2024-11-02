@@ -7,7 +7,7 @@ type TCustomSelectProps = {
   label?: string;
   placeholder?: string;
   name: string;
-  options: { value: string; label: string; disabled?: boolean }[];
+  options: { value: string | number; label: string; disabled?: boolean }[];
   multiple?: boolean;
   rules?: any;
 };

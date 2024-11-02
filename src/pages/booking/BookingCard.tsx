@@ -5,6 +5,7 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import { FaBolt, FaDroplet } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
 import BookingCardDetails from "./BookingCardDetails";
+import Rating from "@/components/share/Rating";
 
 type TBookingCardProps = {
   car: TCar;
@@ -38,6 +39,7 @@ const BookingCard = ({ car, handleConfirmBooking }: TBookingCardProps) => {
         <div className="p-4 flex-grow">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold">{car.name}</h2>
+            <Rating color="yellow" rating={car.averageRating} />
             {car.isDeleted === true && (
               <div className="text-2xl text-red-700 flex items-center gap-2">
                 <MdCancel /> Deleted

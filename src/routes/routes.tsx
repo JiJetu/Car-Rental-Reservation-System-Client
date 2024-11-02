@@ -10,6 +10,8 @@ import { userPaths } from "./user.routes";
 import NotFoundPage from "@/pages/not-found-page/NotFoundPage";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
 import { userRole } from "@/constant/role";
+import ForgetPassword from "@/pages/forgotPassword/ForgetPassword";
+import ResetPassword from "@/pages/forgotPassword/ResetPassword";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
   {
     path: "/signUp",
     element: <SignUp />,
+  },
+  {
+    path: "forget-password",
+    element: <ForgetPassword />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
   },
 ]);
 

@@ -29,6 +29,7 @@ import {
 import { CardContent } from "@/components/ui/card";
 import moment from "moment";
 import { addToWishList } from "@/redux/features/user/booking.slice";
+import Rating from "@/components/share/Rating";
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -70,6 +71,7 @@ const CarDetails = () => {
     shortDescription,
     location,
     isElectric,
+    averageRating,
     pricePerHour,
     status,
     description,
@@ -146,6 +148,11 @@ const CarDetails = () => {
             </div>
           )}
 
+          {/* rating Badge */}
+          <div className=" space-x-2 mb-4">
+            <Rating color="yellow" rating={averageRating} />
+          </div>
+
           <p className="text-2xl font-bold mb-4">{shortDescription}</p>
 
           {/* car features */}
@@ -208,7 +215,7 @@ const CarDetails = () => {
         <>
           <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
           <div className="max-w-[85%] md:max-w-full mx-auto">
-            <Carousel className="mx-5 md:mx-14">
+            <Carousel className="mx-5 md:mx-32">
               <CarouselContent>
                 {/* displaying reviews with carousel */}
                 {reviews?.map((review) => (
@@ -216,17 +223,20 @@ const CarDetails = () => {
                     key={review?._id}
                     className="flex justify-center"
                   >
-                    <div className="p-4 w-full max-w-2xl min-h-[450px] md:min-h-[400px]">
+                    <div className="w-full max-w-2xl min-h-[450px] md:min-h-[300px]">
                       <Card className="h-full shadow-lg">
                         <CardContent className="dark:bg-[#1a1919] flex flex-col-reverse md:flex-row items-center justify-between h-full p-6">
-                          <div className="md:w-2/3 mb-6 md:mb-0 md:mr-6 space-y-4">
+                          <div className="md:w-2/3 mb-6 md:mb-0 md:mr-6 space-y-4 text-center md:text-start">
                             <h3 className="text-base text-gray-500 dark:text-white">
                               Customer Review
                             </h3>
+                            <div className="space-x-2 mb-4 flex justify-center md:justify-start">
+                              <Rating color="yellow" rating={review.rating} />
+                            </div>
                             <p className="md:text-xl dark:text-white font-semibold">
                               {review?.userReview}
                             </p>
-                            <p className="text-base space-x-2 text-gray-500 dark:text-white flex items-center">
+                            <p className="text-base space-x-2 text-gray-500 dark:text-white flex flex-col md:flex-row items-center">
                               <span className="text-3xl">-</span>
                               <span>{review?.user?.name}</span>
                               <span>

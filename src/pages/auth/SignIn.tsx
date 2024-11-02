@@ -106,7 +106,7 @@ const SignIn = () => {
 
           {/* Forgot Password */}
           <div className="flex justify-end">
-            <Link to="/forgot-password" className="text-[#079b62] underline">
+            <Link to="/forget-password" className="text-[#079b62] underline">
               Forgot Password?
             </Link>
           </div>

@@ -7,13 +7,25 @@ import CustomDate from "@/components/form/CustomDate";
 import { Col, Row } from "antd";
 import bgImage from "../../assets/images/1-19.jpg";
 import { useTodayAndMinEndDate } from "@/hooks/useFormTodayEndDay";
+import { useAppDispatch } from "@/redux/hooks";
+import { useNavigate } from "react-router-dom";
+import { addToWishList } from "@/redux/features/user/booking.slice";
 
 const Hero = () => {
-  const { today, minEndDate } = useTodayAndMinEndDate(4);
+  const { today, minEndDate } = useTodayAndMinEndDate(2);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // Form submission handler
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const wishListCarInfo = {
+      car: { location: data.location },
+    };
+
+    await dispatch(addToWishList({ wishListCarInfo }));
+
+    navigate(`/booking`);
   };
 
   return (

@@ -9,17 +9,22 @@ import {
   useGetUserBookingQuery,
 } from "@/redux/features/user/booking.api";
 import { TBooking, TResponse } from "@/tyeps";
-import { Form, Modal, Rate } from "antd";
-import moment from "moment";
-import { useState } from "react";
+import { Form, Modal, Pagination, Rate } from "antd";
+import { useEffect, useMemo, useState } from "react";
 import { Controller } from "react-hook-form";
-import { MdReviews } from "react-icons/md";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import ReturnedCar from "./ReturnedCar";
+import PendingCanceled from "./PendingCanceled";
 
 const BookingHistory = () => {
   const [cancelBooking] = useCancelBookingMutation();
+  const [page, setPage] = useState(1);
+  const [pendingPage, setPendingPage] = useState(1);
+  const pageSize = 5;
   const [bookingPayment] = useBookingPaymentMutation();
+  // Determine cars to display based on the current page
+
   const {
     data: userBooking,
     isFetching,
@@ -29,26 +34,50 @@ const BookingHistory = () => {
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
     null
   );
-  const [addReview] = useAddReviewMutation();
+  const [addReview, { isLoading }] = useAddReviewMutation();
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   const bookings = userBooking?.data as TBooking[] | undefined;
 
-  const returnedCars =
-    bookings?.filter((booking: TBooking) => booking.paymentStatus) || [];
+  const sortedPendingPayments = useMemo(() => {
+    const pendingPayments =
+      bookings?.filter((booking) => !booking.paymentStatus) || [];
+    return [...pendingPayments].sort((a, b) => {
+      if (!a.canceledBooking) return -1;
+      if (!b.canceledBooking) return 1;
+      return 0;
+    });
+  }, [bookings]);
 
-  const pendingPayments =
-    bookings?.filter((booking: TBooking) => !booking.paymentStatus) || [];
+  const paginatedPendingPayments = useMemo(() => {
+    const startIndex = (pendingPage - 1) * pageSize;
+    const endIndex = pendingPage * pageSize;
+    return sortedPendingPayments.slice(startIndex, endIndex);
+  }, [sortedPendingPayments, pendingPage, pageSize]);
 
-  const sortedPendingPayments = pendingPayments
-    ? [...pendingPayments].sort((a, b) => {
-        if (!a.canceledBooking) return -1;
-        if (!b.canceledBooking) return 1;
-        return 0;
-      })
-    : [];
+  const sortedReturnedCars = useMemo(() => {
+    const returnedCars =
+      bookings?.filter((booking) => booking.paymentStatus) || [];
+    return [...returnedCars].sort((a, b) => {
+      if (!a.reviewStatus) return -1;
+      if (!b.reviewStatus) return 1;
+      return 0;
+    });
+  }, [bookings]);
+
+  const paginatedReturnCars = useMemo(() => {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = page * pageSize;
+    return sortedReturnedCars.slice(startIndex, endIndex);
+  }, [sortedReturnedCars, page, pageSize]);
+
+  // reset pages when bookings change
+  useEffect(() => {
+    setPage(1);
+    setPendingPage(1);
+  }, [bookings]);
 
   const handleCancelBooking = async (bookingId: string) => {
     Swal.fire({
@@ -113,7 +142,7 @@ const BookingHistory = () => {
   const handleSubmitReview = async (data: any) => {
     if (!selectedBookingId) return;
 
-    const toastId = toast.loading("Payment processing....");
+    const toastId = toast.loading("Review saving....");
 
     const reviewInfo = {
       bookingId: selectedBookingId,
@@ -132,7 +161,7 @@ const BookingHistory = () => {
         });
       }
 
-      toast.success("Review added successfully.", {
+      toast.success("Review save successfully.", {
         id: toastId,
         duration: 2000,
       });
@@ -153,232 +182,46 @@ const BookingHistory = () => {
           </div>
         ) : (
           <div>
-            {returnedCars.length > 0 && (
+            {sortedReturnedCars.length > 0 && (
               <div className="overflow-x-auto bg-white shadow-lg rounded-lg mb-6">
                 <h2 className="text-lg font-semibold text-gray-800 p-4">
                   Returned Cars
                 </h2>
-                <table className="table-auto w-full">
-                  <thead className="bg-gray-200 text-gray-700 font-semibold uppercase text-sm">
-                    <tr>
-                      <th className="p-3">#</th>
-                      <th className="p-3">Car</th>
-                      <th className="p-3">Pick-Up</th>
-                      <th className="p-3">Drop-Off</th>
-                      <th className="p-3">Total Cost</th>
-                      <th className="p-3">Booking Status</th>
-                      <th className="p-3">Payment Status</th>
-                      <th className="p-3">Review</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {returnedCars?.map((booking: TBooking, index: number) => (
-                      <tr
-                        key={booking._id}
-                        className="text-sm text-gray-700 border-b hover:bg-gray-100"
-                      >
-                        <td className="p-4 text-center">{index + 1}</td>
-                        <td className="p-4 flex items-center gap-3">
-                          <div className="avatar w-12 h-12 rounded-full overflow-hidden shadow">
-                            <img
-                              src={booking?.car?.carImage}
-                              alt={booking?.car?.name}
-                              className="object-cover w-full h-full"
-                            />
-                          </div>
-                          <div>
-                            <p className="font-bold text-gray-800">
-                              {booking?.car?.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {booking?.car?.location}
-                            </p>
-                          </div>
-                        </td>
-                        <td className="p-4">
-                          <p>{booking?.startDate}</p>
-                          <span className="badge text-xs bg-gray-200 px-2 py-1 mt-1">
-                            {booking?.startTime}
-                          </span>
-                        </td>
-                        <td className="p-4">
-                          <>
-                            <p>{booking?.endDate}</p>
-                            <span className="badge text-xs bg-gray-200 px-2 py-1 mt-1">
-                              {booking?.endTime}
-                            </span>
-                          </>
-                        </td>
-                        <td className="p-4">
-                          <p className="text-gray-800 font-semibold">
-                            $ {booking.totalCost.toFixed(2)}
-                          </p>
-                        </td>
-                        <td className="p-4">
-                          <p className="text-green-600 font-semibold">
-                            Confirmed
-                          </p>
-                        </td>
-                        <td className="p-4">
-                          <p className="text-green-600 font-semibold">
-                            Paid <br />
-                            {booking.transactionId}
-                          </p>
-                        </td>
-                        <td className="p-4">
-                          {booking.reviewStatus ? (
-                            <p className="text-gray-600 font-semibold">
-                              Reviewed
-                            </p>
-                          ) : (
-                            <Button
-                              onClick={() => {
-                                handleOpenModal();
-                                setSelectedBookingId(booking?._id);
-                              }}
-                              className="bg-green-500 hover:bg-green-700 text-white text-base py-1 px-4 rounded-full shadow"
-                            >
-                              <MdReviews />
-                            </Button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <ReturnedCar
+                  handleOpenModal={handleOpenModal}
+                  returnedCars={paginatedReturnCars}
+                  setSelectedBookingId={setSelectedBookingId}
+                />
+                <div className="flex justify-center py-2">
+                  <Pagination
+                    current={page}
+                    onChange={(value) => setPage(value)}
+                    pageSize={pageSize}
+                    total={sortedReturnedCars?.length}
+                    showSizeChanger={false}
+                  />
+                </div>
               </div>
             )}
-            {pendingPayments.length > 0 && (
+            {sortedPendingPayments.length > 0 && (
               <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
                 <h2 className="text-lg font-semibold text-gray-800 p-4">
                   Pending Payments
                 </h2>
-                <table className="table-auto w-full">
-                  <thead className="bg-gray-200 text-gray-700 font-semibold uppercase text-sm">
-                    <tr>
-                      <th className="p-3">#</th>
-                      <th className="p-3">Car</th>
-                      <th className="p-3">Pick-Up</th>
-                      <th className="p-3">Drop-Off</th>
-                      <th className="p-3">Total Cost</th>
-                      <th className="p-3">Booking Status</th>
-                      <th className="p-3">Payment Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sortedPendingPayments?.map(
-                      (booking: TBooking, index: number) => {
-                        const isWithin24Hours =
-                          moment().diff(moment(booking.createdAt), "hours") <
-                          24;
-                        const canCancel =
-                          isWithin24Hours && !booking.bookingConfirm;
-
-                        return (
-                          <tr
-                            key={booking._id}
-                            className="text-sm text-gray-700 border-b hover:bg-gray-100"
-                          >
-                            <td className="p-4 text-center">{index + 1}</td>
-                            <td className="p-4 flex items-center gap-3">
-                              <div className="avatar w-12 h-12 rounded-full overflow-hidden shadow">
-                                <img
-                                  src={booking?.car?.carImage}
-                                  alt={booking?.car?.name}
-                                  className="object-cover w-full h-full"
-                                />
-                              </div>
-                              <div>
-                                <p className="font-bold text-gray-800">
-                                  {booking?.car?.name}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                  {booking?.car?.location}
-                                </p>
-                              </div>
-                            </td>
-                            <td className="p-4">
-                              <p>{booking?.startDate}</p>
-                              <span className="badge text-xs bg-gray-200 px-2 py-1 mt-1">
-                                {booking?.startTime}
-                              </span>
-                            </td>
-                            <td className="p-4">
-                              {booking?.endDate ? (
-                                <>
-                                  <p>{booking?.endDate}</p>
-                                  <span className="badge text-xs bg-gray-200 px-2 py-1 mt-1">
-                                    {booking?.endTime}
-                                  </span>
-                                </>
-                              ) : (
-                                <p className="text-gray-500 italic">
-                                  Updated after returning car
-                                </p>
-                              )}
-                            </td>
-                            <td className="p-4">
-                              {booking.endTime === null ? (
-                                <p className="text-gray-500 italic">
-                                  Returning car
-                                </p>
-                              ) : (
-                                <p className="text-gray-800 font-semibold">
-                                  $ {booking.totalCost.toFixed(2)}
-                                </p>
-                              )}
-                            </td>
-                            <td className="p-4">
-                              {booking.bookingConfirm ? (
-                                <p className="text-green-600 font-semibold">
-                                  Confirmed
-                                </p>
-                              ) : booking.canceledBooking ? (
-                                <p className="text-red-500 font-semibold">
-                                  Canceled
-                                </p>
-                              ) : canCancel ? (
-                                <Button
-                                  onClick={() =>
-                                    handleCancelBooking(booking._id)
-                                  }
-                                  className="bg-red-500 hover:bg-red-700 text-white text-xs py-1 px-4 rounded-full shadow"
-                                >
-                                  Cancel
-                                </Button>
-                              ) : (
-                                <p className="text-yellow-500 font-semibold">
-                                  Pending
-                                </p>
-                              )}
-                            </td>
-                            <td className="p-4">
-                              {booking.endTime === null ? (
-                                <p className="text-yellow-500 font-semibold">
-                                  Pending
-                                </p>
-                              ) : booking.paymentStatus ? (
-                                <p className="text-green-600 font-semibold">
-                                  Paid <br />
-                                  {booking.transactionId}
-                                </p>
-                              ) : (
-                                <Button
-                                  onClick={() =>
-                                    handleBookingPayment(booking._id)
-                                  }
-                                  className="bg-green-500 hover:bg-green-700 text-white text-xs py-1 px-4 rounded-full shadow"
-                                >
-                                  Pay
-                                </Button>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      }
-                    )}
-                  </tbody>
-                </table>
+                <PendingCanceled
+                  handleBookingPayment={handleBookingPayment}
+                  handleCancelBooking={handleCancelBooking}
+                  sortedPendingPayments={paginatedPendingPayments}
+                />
+                <div className="flex justify-center py-2">
+                  <Pagination
+                    current={pendingPage}
+                    onChange={(value) => setPendingPage(value)}
+                    pageSize={pageSize}
+                    total={sortedPendingPayments?.length}
+                    showSizeChanger={false}
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -408,7 +251,13 @@ const BookingHistory = () => {
           </div>
 
           {/* Submit Button */}
-          <Button type="submit">Submit Review</Button>
+          <Button
+            type="submit"
+            className="bg-green-500 hover:bg-green-700"
+            disabled={isLoading}
+          >
+            Submit Review
+          </Button>
         </CustomForm>
       </Modal>
     </>

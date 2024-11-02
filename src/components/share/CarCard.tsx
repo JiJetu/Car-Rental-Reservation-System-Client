@@ -9,12 +9,14 @@ import { TCar } from "@/tyeps";
 import { FaBolt, FaDroplet } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Rating from "./Rating";
 
 type TCarProps = {
   car: TCar;
+  showRating?: boolean;
 };
 
-const CarCard = ({ car }: TCarProps) => {
+const CarCard = ({ car, showRating = true }: TCarProps) => {
   return (
     <Link to={`/car/${car._id}`}>
       <div className="p-4 flex flex-col h-full">
@@ -27,8 +29,11 @@ const CarCard = ({ car }: TCarProps) => {
             />
           </CardHeader>
           <CardContent className="p-4 flex-grow">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mr-3">
               <CardTitle className="text-2xl font-bold">{car.name}</CardTitle>
+              {showRating && (
+                <Rating color="yellow" rating={car.averageRating} />
+              )}
               {car.isDeleted === true && (
                 <div className="text-2xl text-red-700 flex items-center gap-2">
                   <MdCancel /> Deleted

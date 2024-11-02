@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type TBookingState = {
   wishListCarInfo: {
-    wishCar: TCar | undefined;
+    wishCar: Partial<TCar> | undefined;
     additionalFeatures: string[];
     additionalInsurance: string[];
   };
@@ -25,15 +25,14 @@ const bookingSlice = createSlice({
     addToWishList: (state, action) => {
       initialState;
       const { wishListCarInfo } = action.payload;
-      console.log(state, wishListCarInfo);
       state.wishListCarInfo.wishCar = wishListCarInfo.car;
       state.wishListCarInfo.additionalFeatures =
         wishListCarInfo.additionalFeatures;
       state.wishListCarInfo.additionalInsurance =
         wishListCarInfo.additionalInsurance;
     },
-    clearBookingInfo: () => {
-      initialState;
+    clearWishList: (state) => {
+      state.wishListCarInfo = initialState.wishListCarInfo;
     },
   },
 });
@@ -66,7 +65,7 @@ const bookingSlice = createSlice({
 //   return setTotalPrice(state) + setTex(state, taxRate);
 // };
 
-export const { addToWishList, clearBookingInfo } = bookingSlice.actions;
+export const { addToWishList, clearWishList } = bookingSlice.actions;
 
 export default bookingSlice.reducer;
 

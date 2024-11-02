@@ -30,7 +30,7 @@ const FeaturedCars = () => {
                     key={car._id}
                     className="my-4 md:basis-1/2 lg:basis-1/4 mx-auto"
                   >
-                    <CarCard car={car} />
+                    <CarCard showRating={false} car={car} />
                   </CarouselItem>
                 ))}
               </CarouselContent>

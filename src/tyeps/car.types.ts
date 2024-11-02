@@ -19,5 +19,8 @@ export type TCar = {
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
+  ratingCount: number;
+  ratingSum: number;
+  averageRating: number;
   __v: number;
 };

@@ -6,8 +6,10 @@ export type TBooking = {
   createdAt: string;
   startDate: string;
   endTime: string | null;
+  expectedEndTime: string | null;
   startTime: string;
   endDate: string;
+  expectedEndDate: string;
   totalCost: number;
   updatedAt: string;
   reviewStatus: boolean;

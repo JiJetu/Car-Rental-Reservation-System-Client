@@ -10,6 +10,7 @@ import { useGetAllReviewsQuery } from "@/redux/features/review/review.api";
 import { TReview } from "@/tyeps";
 import Loading from "@/components/share/Loading";
 import moment from "moment";
+import Rating from "@/components/share/Rating";
 
 const Testimonials = () => {
   const {
@@ -46,14 +47,17 @@ const Testimonials = () => {
                 <div className="p-4 w-full max-w-2xl min-h-[450px] md:min-h-[400px]">
                   <Card className="h-full shadow-lg">
                     <CardContent className="dark:bg-[#1a1919] flex flex-col-reverse md:flex-row items-center justify-between h-full p-6">
-                      <div className="md:w-2/3 mb-6 md:mb-0 md:mr-6 space-y-4">
+                      <div className="md:w-2/3 mb-6 md:mb-0 md:mr-6 space-y-4 text-center md:text-start">
                         <h3 className="text-base text-gray-500 dark:text-white">
                           Customer Review
                         </h3>
+                        <div className="space-x-2 mb-4 flex justify-center md:justify-start">
+                          <Rating color="yellow" rating={review.rating} />
+                        </div>
                         <p className="md:text-xl dark:text-white font-semibold">
                           {review?.userReview}
                         </p>
-                        <p className="text-base space-x-2 text-gray-500 dark:text-white flex items-center">
+                        <p className="text-base space-x-2 text-gray-500 dark:text-white flex flex-col md:flex-row items-center">
                           <span className="text-3xl">-</span>
                           <span>{review?.user?.name}</span>
                           <span>
@@ -63,7 +67,7 @@ const Testimonials = () => {
                       </div>
                       <div className="md:w-1/3 flex justify-center">
                         <img
-                          className="rounded-lg w-40 h-40 object-cover"
+                          className="w-40 h-40 rounded-lg md:rounded-full object-cover"
                           src={review?.user?.userImage}
                           alt={review?.user?.name}
                         />
