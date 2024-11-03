@@ -13,7 +13,6 @@ const ForgetPassword = () => {
     const toastId = toast.loading("Updating....");
     try {
       const res = await forgotPassword(data).unwrap();
-      console.log(res);
       if (res?.error) {
         toast.error(res?.error?.data?.message, {
           id: toastId,

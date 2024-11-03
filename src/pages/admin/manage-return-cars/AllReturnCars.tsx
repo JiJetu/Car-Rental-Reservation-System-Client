@@ -59,8 +59,6 @@ const AllReturnCars = () => {
         endTime: endTime,
       })) as TResponse<TBooking>;
 
-      console.log(res);
-
       if (res?.error) {
         return toast.error(res.error.data.message, { id: toastId });
       } else {

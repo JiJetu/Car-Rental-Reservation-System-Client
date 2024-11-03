@@ -25,7 +25,6 @@ type TValidateErrorProps = {
 const SignIn = () => {
   const [login, { error }] = useLoginMutation();
   const validateError = error as TValidateErrorProps;
-  console.log(validateError);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {

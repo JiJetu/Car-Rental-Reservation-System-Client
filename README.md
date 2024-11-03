@@ -12,7 +12,7 @@ A user-friendly and responsive car rental reservation platform designed for cust
 
 ## Live Demo
 
-Check out the live demo of the application [here](https://your-live-demo-link.com).
+Check out the live demo of the application [here](https://car-rental-reservation-system-client-six.vercel.app).
 
 ## Project Description
 
@@ -130,3 +130,7 @@ We welcome contributions! Please follow these steps:
 # Contact
 
 Project Maintainer: **Md Jaoadul Islam**
+
+## Backend Repo.
+
+Check out the [car rental reservation system server](https://github.com/JiJetu/Car-Rental-Reservation-System-Backend) repository.

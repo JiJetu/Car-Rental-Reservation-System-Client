@@ -1,7 +1,7 @@
 import { StarFilled, StarOutlined } from "@ant-design/icons";
 
 const Rating = ({ rating, color }: { rating: number; color: string }) => {
-  const validatedRating = Math.min(Math.max(rating, 1), 5);
+  const validatedRating = Math.min(Math.max(rating ? rating : 5, 1), 5);
 
   return (
     <div className="flex items-center">

@@ -30,7 +30,7 @@ const carApi = baseApi.injectEndpoints({
     }),
     getSingleCar: builder.query({
       query: (id) => {
-        console.log(id);
+        // console.log(id);
         return { url: `/cars/${id}`, method: "GET" };
       },
       providesTags: ["cars"],

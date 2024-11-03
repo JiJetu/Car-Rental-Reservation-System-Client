@@ -26,8 +26,6 @@ const AllUsers = () => {
   const users = allUsers?.data || [];
   const metaData = allUsers?.meta;
 
-  console.log(allUsers);
-
   const handleMakeAdmin = async (userId: string) => {
     Swal.fire({
       title: "Are you sure?",
@@ -85,8 +83,6 @@ const AllUsers = () => {
             userId,
             data: { isBlocked: !isBlocked },
           })) as TResponse<TUser>;
-
-          console.log(res);
 
           if (res?.error) {
             return toast.error(res?.error?.data?.message, {

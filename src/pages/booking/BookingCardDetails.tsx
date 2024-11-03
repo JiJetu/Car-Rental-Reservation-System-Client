@@ -20,7 +20,6 @@ const BookingCardDetails = ({
   handleConfirmBooking,
 }: TBookingCardDetailsProps) => {
   const handleAddAdditionalInsurance: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
     handleConfirmBooking(car, data.additionalInsurance);
   };
 

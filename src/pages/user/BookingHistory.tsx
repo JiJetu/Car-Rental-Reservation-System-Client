@@ -119,8 +119,6 @@ const BookingHistory = () => {
     try {
       const res = (await bookingPayment(id)) as TResponse<any>;
 
-      console.log(res);
-
       if (res?.error) {
         return toast.error(res?.error?.data?.message, {
           id: toastId,
@@ -151,8 +149,6 @@ const BookingHistory = () => {
 
     try {
       const res = (await addReview(reviewInfo)) as TResponse<any>;
-
-      console.log(res);
 
       if (res?.error) {
         return toast.error(res?.error?.data?.message, {

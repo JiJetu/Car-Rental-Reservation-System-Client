@@ -128,7 +128,6 @@ const Booking = () => {
 
   const handleSearch: SubmitHandler<FieldValues> = (data) => {
     setSearchCar(true);
-    console.log(data);
 
     const queryParams: TQueryParam[] = [];
 
@@ -200,8 +199,6 @@ const Booking = () => {
   const handleFinalizeBooking = async () => {
     const toastId = toast.loading("Creating....");
 
-    console.log(bookingDetails);
-
     const bookingInfo = {
       carId: selectedCar?._id,
       startDate: bookingDetails?.startDate,
@@ -216,8 +213,6 @@ const Booking = () => {
 
     try {
       const res = (await addBooking(bookingInfo)) as TResponse<any>;
-
-      console.log(res);
 
       if (res?.error) {
         return toast.error(res?.error?.data?.message, {

@@ -58,8 +58,6 @@ const AllCars = () => {
         try {
           const res = (await deleteCar(id)) as TResponse<TCar>;
 
-          console.log(res);
-
           if (res?.error) {
             toast.error(res?.error?.data?.message, {
               id: toastId,

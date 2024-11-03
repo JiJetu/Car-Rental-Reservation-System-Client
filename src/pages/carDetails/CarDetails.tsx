@@ -83,8 +83,6 @@ const CarDetails = () => {
   );
 
   const handleBookNow: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
-
     const wishListCarInfo = {
       car: carData?.data,
       ...data,

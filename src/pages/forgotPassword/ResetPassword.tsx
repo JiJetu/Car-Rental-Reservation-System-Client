@@ -22,7 +22,7 @@ const ResetPassword = () => {
       const userInfo = { email, newPassword: data.newPassword };
       const userData = { userInfo, token };
       const res = await resetPassword(userData).unwrap();
-      console.log(res);
+
       if (res?.success) {
         toast.success("Password reset successfully!", {
           id: toastId,

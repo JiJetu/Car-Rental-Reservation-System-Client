@@ -56,7 +56,6 @@ const SignUp = () => {
         dispatch(logOut());
         navigate("/signIn");
       }
-      console.log(res);
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
     }

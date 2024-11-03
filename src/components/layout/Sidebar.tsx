@@ -92,7 +92,7 @@ const Sidebar = ({ mode }: TSidebarProps) => {
       <Menu
         theme={mode === modeItem.DARK ? "dark" : "light"}
         mode="inline"
-        items={sidebarItems}
+        items={sidebarItems as any}
       />
 
       <div className="divider divider-success p-2"></div>
@@ -102,7 +102,7 @@ const Sidebar = ({ mode }: TSidebarProps) => {
         theme={mode === modeItem.DARK ? "dark" : "light"}
         mode="inline"
         defaultSelectedKeys={["4"]}
-        items={navItemsGenerator(mainPath)}
+        items={navItemsGenerator(mainPath) as any}
       />
     </Sider>
   );

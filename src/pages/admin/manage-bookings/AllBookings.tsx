@@ -64,8 +64,6 @@ const AllBookings = () => {
     try {
       const res = (await approveBooking({ bookingId })) as TResponse<TBooking>;
 
-      console.log(res);
-
       if (res?.error) {
         toast.error(res?.error?.data?.message, {
           id: toastId,
