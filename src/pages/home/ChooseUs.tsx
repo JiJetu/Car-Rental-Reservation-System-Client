@@ -14,6 +14,7 @@ const ChooseUs = () => {
           Discover the advantages of choosing us for your car rental needs.
         </p>
 
+        {/* card of best price, wide selection & 24/7 support */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <Card className="p-6 shadow-lg rounded-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out dark:bg-[#1a1919] dark:text-white">
             <DollarCircleOutlined className="text-4xl text-[#49af88] mb-4" />

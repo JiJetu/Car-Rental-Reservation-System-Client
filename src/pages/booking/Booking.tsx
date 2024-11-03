@@ -16,6 +16,7 @@ import {
 } from "@/redux/features/user/booking.slice";
 
 const Booking = () => {
+  // params is for getting new search param and prevParam is for saving previous search
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [prevParams, setPrevParams] = useState<TQueryParam[]>([]);
   const [selectedCar, setSelectedCar] = useState<TCar | null>(null);
@@ -30,9 +31,11 @@ const Booking = () => {
   const [isSearchFetching, setIsSearchFetching] = useState(false);
   const [addBooking] = useAddBookingMutation();
   const navigate = useNavigate();
+  // getting RTK local saving info for wishListCarInfo
   const wishListCarInfo = useAppSelector(selectedBooking);
   const dispatch = useAppDispatch();
 
+  // fetching with search params for all car data with the help of RTK query
   const {
     data: carsData,
     isFetching,
@@ -45,7 +48,7 @@ const Booking = () => {
     ...params,
   ]);
 
-  // Update params based on wishListCarInfo
+  // update params based on wishListCarInfo
   useEffect(() => {
     const queryParams: TQueryParam[] = [];
 
@@ -95,6 +98,7 @@ const Booking = () => {
     dispatch(clearWishList());
   }, []);
 
+  // for getting all data at a time and refetch data if it's the first page
   useEffect(() => {
     if (!isFetching && carsData && carsData.data) {
       if (page === 1) {
@@ -119,13 +123,13 @@ const Booking = () => {
     isSearchFetching,
     setIsSearchFetching,
   ]);
-
   const loadMoreCars = () => {
     if (!isFetching && hasMore) {
       setPage((prePage) => prePage + 1);
     }
   };
 
+  // search form handler and set the query to get require car data
   const handleSearch: SubmitHandler<FieldValues> = (data) => {
     setSearchCar(true);
 
@@ -165,7 +169,7 @@ const Booking = () => {
       });
     }
 
-    // Compare with previous search params to avoid redundant fetching
+    // compare with previous search params to avoid redundant fetching
     const isSameParams =
       JSON.stringify(prevParams) === JSON.stringify(queryParams);
     if (!isSameParams) {
@@ -178,11 +182,13 @@ const Booking = () => {
     }
   };
 
+  // handle click on booking button and save the car data for booking form and final booking
   const handleConfirmBooking = (car: TCar, addInsurance: string[]) => {
     setSelectedCar(car);
     setAdditionalInsurance(addInsurance);
   };
 
+  // booking form for getting user info, time and date for booking car
   const handleBookingSubmit: SubmitHandler<FieldValues> = (data) => {
     const startTime = data.startTime.format("HH:mm");
     const endTime = data.endTime.format("HH:mm");
@@ -196,6 +202,7 @@ const Booking = () => {
     setBookingDetails(bookingInfo as any);
   };
 
+  // confirm booking and save info into booking history
   const handleFinalizeBooking = async () => {
     const toastId = toast.loading("Creating....");
 
@@ -235,12 +242,14 @@ const Booking = () => {
 
   return (
     <div className="container mx-auto p-6">
+      {/* search form section */}
       {!selectedCar && !bookingDetails && (
         <>
           <SearchForm onSearch={handleSearch} loading={isFetching} />
         </>
       )}
 
+      {/* showing result section */}
       {!selectedCar && searchCar && !bookingDetails && (
         <div className="container mx-auto p-6">
           <SearchResult
@@ -254,6 +263,7 @@ const Booking = () => {
         </div>
       )}
 
+      {/* sowing booking from section */}
       {selectedCar && !bookingDetails && (
         <BookingForm
           selectedCar={selectedCar}
@@ -262,6 +272,7 @@ const Booking = () => {
         />
       )}
 
+      {/* revision and finalize section for booking */}
       {bookingDetails && (
         <BookingConfirm
           additionalInsurance={additionalInsurance}

@@ -10,9 +10,12 @@ import { useMode } from "@/hooks/useMode";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
+  // getting current user form redux local storage
   const user = useAppSelector(selectCurrentUser);
+  // hook for change mode
   const { changeMode, mode } = useMode();
 
+  // remove current user form redux local storage
   const handleLogout = () => {
     dispatch(logOut());
   };
@@ -42,6 +45,7 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[100] mt-3 w-52 p-2 shadow"
             >
+              {/* nav items */}
               <NavbarItems />
             </ul>
           </div>
@@ -51,6 +55,7 @@ const Navbar = () => {
             to={"/"}
             className="text-base md:text-xl font-semibold font-serif"
           >
+            {/* logo section */}
             <div className="flex items-center md:gap-2">
               <img
                 className="h-[30px] w-[30px] md:h-[70px] md:w-[70px]"
@@ -65,6 +70,7 @@ const Navbar = () => {
           </NavLink>
         </div>
 
+        {/* login/sign up and darkmode change button section */}
         <div className="navbar-end space-x-1 md:space-x-3">
           <Button
             className="bg-white text-slate-800 hover:bg-white"
@@ -89,6 +95,7 @@ const Navbar = () => {
           )}
         </div>
       </nav>
+      {/* active nav items for tablet and other large device */}
       <nav className="navbar lg:flex lg:justify-center lg:items-center bg-base-100 dark:bg-transparent hidden lg:visible">
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 space-x-2">

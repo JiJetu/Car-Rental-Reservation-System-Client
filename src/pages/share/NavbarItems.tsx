@@ -5,10 +5,13 @@ import { navItemsGenerator } from "@/utils/navItemsGenerator";
 import { NavLink } from "react-router-dom";
 
 export const NavbarItems = () => {
+  // getting current user from local storage
   const user = useAppSelector(selectCurrentUser);
+  // creating navbar items with require path
   const navItems = navItemsGenerator(mainPath);
   const allNavItems = [...navItems];
 
+  // dashboard as nav item
   const dashboardAsNavItem = user
     ? {
         key: "dashboard",
@@ -27,6 +30,7 @@ export const NavbarItems = () => {
       }
     : null;
 
+  // adding dashboard with nav item if user exits
   if (dashboardAsNavItem) {
     allNavItems.push(dashboardAsNavItem);
   }

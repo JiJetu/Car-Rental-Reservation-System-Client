@@ -5,6 +5,7 @@ import ReactImageMagnifier from "simple-image-magnifier/react";
 import {
   CheckOutlined,
   CloseOutlined,
+  DeleteFilled,
   EnvironmentOutlined,
 } from "@ant-design/icons";
 import { Button } from "@/components/ui/button";
@@ -75,6 +76,7 @@ const CarDetails = () => {
     pricePerHour,
     status,
     description,
+    isDeleted,
     carImage,
   } = carData?.data as TCar;
 
@@ -116,7 +118,9 @@ const CarDetails = () => {
             <Tag
               color={status === CarStatus.available ? "green" : "red"}
               icon={
-                status === CarStatus.available ? (
+                isDeleted ? (
+                  <DeleteFilled />
+                ) : status === CarStatus.available ? (
                   <CheckOutlined />
                 ) : (
                   <CloseOutlined />
@@ -124,7 +128,11 @@ const CarDetails = () => {
               }
               className="text-lg"
             >
-              {status === CarStatus.available ? "Available" : "Unavailable"}
+              {isDeleted
+                ? "Deleted"
+                : status === CarStatus.available
+                ? "Available"
+                : "Unavailable"}
             </Tag>
 
             {/* Price */}
@@ -190,6 +198,7 @@ const CarDetails = () => {
             />
 
             <Button
+              disabled={isDeleted || status === CarStatus.unavailable}
               type="submit"
               className="bg-[#00712D] text-lg px-6 hover:bg-[#005B21] text-white"
             >

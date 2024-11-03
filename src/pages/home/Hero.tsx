@@ -17,15 +17,16 @@ const Hero = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // Form submission handler
+  // hero section form submission handler
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const wishListCarInfo = {
       car: { location: data.location },
     };
 
+    // saving info to wishListCarInfo in redux local storage
     await dispatch(addToWishList({ wishListCarInfo }));
 
-    navigate(`/booking`);
+    navigate(`/cars`);
   };
 
   return (

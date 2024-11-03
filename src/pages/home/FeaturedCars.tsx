@@ -10,6 +10,7 @@ import { useGetAllCarsQuery } from "@/redux/features/admin/carApi";
 import { TCar } from "@/tyeps/car.types";
 
 const FeaturedCars = () => {
+  // fetching all car data with the help of RTK query
   const { data: carsData, isError } = useGetAllCarsQuery(undefined);
   const cars = carsData?.data;
 
@@ -21,6 +22,7 @@ const FeaturedCars = () => {
           Check out our top picks for your next journey.
         </p>
 
+        {/* showing car data with carousel  */}
         <div className="max-w-[85%] md:max-w-full mx-auto">
           <Carousel opts={{ align: "start" }} className="mx-5 md:mx-14">
             {(cars && cars.length > 0) || isError ? (

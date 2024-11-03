@@ -17,8 +17,10 @@ const { Text } = Typography;
 
 const AllBookings = () => {
   const [searchDate, setSearchDate] = useState<string | null>(null);
-  const [approveBooking] = useApproveBookingMutation();
-  const [cancelBooking] = useCancelBookingMutation();
+  const [approveBooking, { isLoading: approveLoading }] =
+    useApproveBookingMutation();
+  const [cancelBooking, { isLoading: cancelLoading }] =
+    useCancelBookingMutation();
 
   // const {
   //   data: userBooking,
@@ -200,6 +202,7 @@ const AllBookings = () => {
         ) : (
           <div className="flex gap-2">
             <Button
+              disabled={approveLoading || cancelLoading}
               onClick={() => handleApproveBooking(record._id)}
               icon={<FcApproval />}
               type="primary"
@@ -209,6 +212,7 @@ const AllBookings = () => {
               Approve
             </Button>
             <Button
+              disabled={approveLoading || cancelLoading}
               onClick={() => handleCancelBooking(record._id)}
               icon={<MdCancel />}
               type="primary"

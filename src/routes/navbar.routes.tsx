@@ -39,10 +39,6 @@ export const mainPath = [
   },
   {
     path: "car/:id",
-    element: (
-      <ProtectedRoute role={userRole.USER || userRole.ADMIN}>
-        <CarDetails />
-      </ProtectedRoute>
-    ),
+    element: <CarDetails />,
   },
 ];

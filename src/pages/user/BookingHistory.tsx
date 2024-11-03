@@ -45,8 +45,13 @@ const BookingHistory = () => {
     const pendingPayments =
       bookings?.filter((booking) => !booking.paymentStatus) || [];
     return [...pendingPayments].sort((a, b) => {
-      if (!a.canceledBooking) return -1;
-      if (!b.canceledBooking) return 1;
+      // Sort `bookingConfirm` first
+      if (a.bookingConfirm && !b.bookingConfirm) return -1;
+      if (!a.bookingConfirm && b.bookingConfirm) return 1;
+
+      // Sort by `!canceledBooking` second
+      if (!a.canceledBooking && b.canceledBooking) return -1;
+      if (a.canceledBooking && !b.canceledBooking) return 1;
       return 0;
     });
   }, [bookings]);

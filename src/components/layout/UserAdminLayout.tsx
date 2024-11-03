@@ -16,13 +16,15 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const UserAdminLayout = () => {
+  // getting RTK local saving info for wishListCarInfo
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectCurrentUser);
 
+  // getting current mode and change handler
   const { changeMode, mode } = useMode();
 
+  // for showing date and time
   const [currentDateTime, setCurrentDateTime] = useState(moment());
-
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentDateTime(moment());
@@ -30,6 +32,7 @@ const UserAdminLayout = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // logout handler
   const handleLogout = () => {
     dispatch(logOut());
   };
@@ -40,8 +43,10 @@ const UserAdminLayout = () => {
         mode === modeItem.DARK ? "dark:bg-[#1a1919]" : "bg-[#f0f2f5]"
       }`}
     >
+      {/* sidebar */}
       <Sidebar mode={mode} />
       <Layout>
+        {/* header of dashboard */}
         <Header
           className={`flex justify-between items-center px-6 shadow-sm ${
             mode === modeItem.DARK ? "dark:bg-[#1a1919]" : "bg-white"
@@ -104,6 +109,7 @@ const UserAdminLayout = () => {
           }`}
           style={{ minHeight: "calc(100vh - 112px)" }}
         >
+          {/* main layout section */}
           <Outlet />
         </Content>
       </Layout>

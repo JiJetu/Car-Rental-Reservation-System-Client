@@ -21,6 +21,7 @@ const ResetPassword = () => {
     try {
       const userInfo = { email, newPassword: data.newPassword };
       const userData = { userInfo, token };
+      console.log(userData);
       const res = await resetPassword(userData).unwrap();
 
       if (res?.success) {

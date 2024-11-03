@@ -32,12 +32,15 @@ const COLORS = ["#0088FE", "#FF8042", "#FFBB28", "#00C49F"];
 const UserDashboard: React.FC = () => {
   const [page, setPage] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  // fetching specific user bookings data with the help of RTK query
   const {
     data: userBookingData,
     isFetching,
     isError,
   } = useGetUserBookingQuery(undefined);
+  // update user data with the help of RTK query
   const [updateUser] = useUpdateUserMutation();
+  // hook for image upload
   const { uploadImage, isUploading } = useImageUpload();
   const { data: userInfo, isLoading: userInfoUpdating } =
     useGetUserQuery(undefined);
@@ -63,6 +66,7 @@ const UserDashboard: React.FC = () => {
     { name: "Completed", value: bookingMetrics.completed },
   ];
 
+  // filter all return data
   const returnedCars =
     bookings?.filter((booking: TBooking) => booking.paymentStatus) || [];
 
@@ -74,6 +78,7 @@ const UserDashboard: React.FC = () => {
     userImage: userData?.userImage || "",
   };
 
+  // handler for update user info
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = toast.loading("Updating user information...");
     try {
@@ -112,6 +117,7 @@ const UserDashboard: React.FC = () => {
     }
   };
 
+  // table for showing all resent booking those had paid
   const columns: TableColumnsType<TBooking> = [
     {
       title: "Image",
@@ -156,6 +162,7 @@ const UserDashboard: React.FC = () => {
         <Text className="text-xl font-bold dark:text-white">
           User Dashboard
         </Text>
+        {/* user info  edit button */}
         <Button
           type="primary"
           icon={<EditOutlined />}
@@ -191,9 +198,11 @@ const UserDashboard: React.FC = () => {
           )}
         </div>
 
+        {/* user info */}
         <UserProfile userData={userData} />
       </div>
 
+      {/* resent booking with paid info  */}
       {isFetching ? (
         <Loading />
       ) : bookings.length === 0 ? (

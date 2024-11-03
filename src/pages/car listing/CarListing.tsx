@@ -1,16 +1,26 @@
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { CarStatus, TQueryParam } from "@/tyeps";
 import { useGetAllCarsQuery } from "@/redux/features/admin/carApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CarFilters from "./CarFilters";
 import CarCard from "@/components/share/CarCard";
 import Loading from "@/components/share/Loading";
 import CustomForm from "@/components/form/CustomForm";
 import { Pagination } from "antd";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  clearWishList,
+  selectedBooking,
+} from "@/redux/features/user/booking.slice";
 
 const CarListing = () => {
+  // params for queary search
   const [params, setParams] = useState<TQueryParam[]>([]);
   const [page, setPage] = useState(1);
+  // getting RTK local saving info for wishListCarInfo
+  const wishListCarInfo = useAppSelector(selectedBooking);
+  const dispatch = useAppDispatch();
+  // fetching with search params for all car data with the help of RTK query
   const {
     data: carsData,
     isFetching,
@@ -26,6 +36,24 @@ const CarListing = () => {
   const cars = carsData?.data;
   const metaData = carsData?.meta;
 
+  // Update params based on wishListCarInfo
+  useEffect(() => {
+    const queryParams: TQueryParam[] = [];
+
+    if (wishListCarInfo?.wishCar) {
+      if (wishListCarInfo.wishCar.location) {
+        queryParams.push({
+          name: "location",
+          value: wishListCarInfo.wishCar.location,
+        });
+      }
+    }
+    setParams(queryParams);
+
+    dispatch(clearWishList());
+  }, []);
+
+  // filter sumbmit handler for search and filter
   const handleFilterSubmit: SubmitHandler<FieldValues> = (data) => {
     const queryParams: TQueryParam[] = [];
 
@@ -61,11 +89,13 @@ const CarListing = () => {
   return (
     <div className="container mx-auto">
       <div className="p-4">
+        {/* form section for search */}
         <CustomForm resetFrom={false} onSubmit={handleFilterSubmit}>
           <CarFilters onSubmit={handleFilterSubmit} loading={isFetching} />
         </CustomForm>
       </div>
 
+      {/* showing result sectiion */}
       {isFetching ? (
         <Loading />
       ) : cars?.length === 0 || isError ? (

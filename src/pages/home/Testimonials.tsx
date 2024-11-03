@@ -13,6 +13,7 @@ import moment from "moment";
 import Rating from "@/components/share/Rating";
 
 const Testimonials = () => {
+  // fetching all review data with the help of RTK query
   const {
     data: reviewData,
     isFetching,
@@ -38,6 +39,7 @@ const Testimonials = () => {
       <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
         Customer Testimonials
       </h2>
+      {/* carousol with user review info */}
       <div className="max-w-[85%] md:max-w-full mx-auto">
         <Carousel className="mx-5 md:mx-14">
           <CarouselContent>
