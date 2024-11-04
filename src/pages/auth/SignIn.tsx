@@ -45,13 +45,23 @@ const SignIn = () => {
 
       const res = await login(userInfo).unwrap();
 
-      const user = verifyToken(res.token) as TUser;
+      if (!res?.data?.isBlocked) {
+        const user = verifyToken(res.token) as TUser;
 
-      dispatch(
-        setUser({ user: { ...user, name: res?.data?.name }, token: res.token })
-      );
-      toast.success("Logged in successful", { id: toastId, duration: 2000 });
-      navigate(`/${user.role}/dashboard`);
+        dispatch(
+          setUser({
+            user: { ...user, name: res?.data?.name },
+            token: res.token,
+          })
+        );
+        toast.success("Logged in successful", { id: toastId, duration: 2000 });
+        navigate(`/${user.role}/dashboard`);
+      } else {
+        toast.warning("Your account have been blocked", {
+          id: toastId,
+          duration: 3000,
+        });
+      }
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
     }

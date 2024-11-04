@@ -1,3 +1,4 @@
+import { useGetUserQuery } from "@/redux/features/admin/user.api";
 import { logOut, useCurrentToken } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { verifyToken } from "@/utils/verifyToken";
@@ -8,6 +9,7 @@ type TProtectedRouteProps = { children: ReactNode; role: string | undefined };
 
 const ProtectedRoute = ({ children, role }: TProtectedRouteProps) => {
   const token = useAppSelector(useCurrentToken);
+  const { data: userInfo } = useGetUserQuery(undefined);
   const dispatch = useAppDispatch();
 
   let user: any;
@@ -15,13 +17,22 @@ const ProtectedRoute = ({ children, role }: TProtectedRouteProps) => {
     user = verifyToken(token);
   }
 
+  console.log(userInfo);
+
   useEffect(() => {
-    if (role !== undefined && role !== user?.role) {
+    if (
+      (role !== undefined && role !== user?.role) ||
+      userInfo?.data?.isBlocked
+    ) {
       dispatch(logOut());
     }
-  }, [dispatch, role, user]);
+  }, [dispatch, role, user, userInfo?.data?.isBlocked]);
 
-  if (!token || (role !== undefined && role !== user?.role)) {
+  if (
+    !token ||
+    (role !== undefined && role !== user?.role) ||
+    userInfo?.data?.isBlocked
+  ) {
     return <Navigate to={"/signIn"} replace={true} />;
   }
 

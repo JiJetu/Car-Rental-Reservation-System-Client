@@ -23,7 +23,7 @@ const ForgetPassword = () => {
         id: toastId,
         duration: 4000,
       });
-      window.location.href = "https://mail.google.com/mail/u/0/#inbox";
+      // window.location.href = "https://mail.google.com/mail/u/0/#inbox";
     } catch (error) {
       toast.error("Failed to send password reset email.", {
         id: toastId,

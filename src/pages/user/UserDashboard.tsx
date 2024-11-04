@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Button,
   Modal,
@@ -31,6 +31,7 @@ const COLORS = ["#0088FE", "#FF8042", "#FFBB28", "#00C49F"];
 
 const UserDashboard: React.FC = () => {
   const [page, setPage] = useState(1);
+  const pageSize = 5;
   const [isModalVisible, setIsModalVisible] = useState(false);
   // fetching specific user bookings data with the help of RTK query
   const {
@@ -67,8 +68,15 @@ const UserDashboard: React.FC = () => {
   ];
 
   // filter all return data
-  const returnedCars =
-    bookings?.filter((booking: TBooking) => booking.paymentStatus) || [];
+  const returnedCars = useMemo(() => {
+    return bookings?.filter((booking: TBooking) => booking.paymentStatus) || [];
+  }, [bookings]);
+
+  const paginatedReturnCars = useMemo(() => {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = page * pageSize;
+    return returnedCars.slice(startIndex, endIndex);
+  }, [returnedCars, page, pageSize]);
 
   const defaultValues = {
     name: userData?.name || "",
@@ -218,18 +226,18 @@ const UserDashboard: React.FC = () => {
           <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
             <Table
               columns={columns}
-              dataSource={returnedCars}
+              dataSource={paginatedReturnCars}
               rowKey={(record) => record._id}
               pagination={false}
               scroll={{ x: 800 }}
             />
             <div className="flex justify-center mt-4">
               <Pagination
-                className="dark:bg-white"
                 current={page}
                 onChange={(value) => setPage(value)}
-                pageSize={userBookingData?.meta?.limit}
-                total={userBookingData?.meta?.total}
+                pageSize={pageSize}
+                total={bookings?.length}
+                showSizeChanger={false}
               />
             </div>
           </div>
