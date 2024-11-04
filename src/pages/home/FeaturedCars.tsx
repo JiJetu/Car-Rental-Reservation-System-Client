@@ -11,10 +11,11 @@ import { TCar } from "@/tyeps/car.types";
 
 const FeaturedCars = () => {
   // fetching all car data with the help of RTK query
-  const { data: carsData, isError } = useGetAllCarsQuery({
-    name: "isDeleted",
-    value: false,
-  });
+  const { data: carsData, isError } = useGetAllCarsQuery([
+    { name: "limit", value: 10 },
+    { name: "page", value: 1 },
+    { name: "isDeleted", value: false },
+  ]);
   const cars = carsData?.data;
 
   return (
